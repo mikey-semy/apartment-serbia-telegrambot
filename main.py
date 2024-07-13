@@ -2,6 +2,11 @@ import os
 import random
 import telebot
 
+import configparser
+
+config = configparser.ConfigParser()
+config.read("messages.ini")
+
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 
 
@@ -27,13 +32,24 @@ dialog = {
 
 
 # --------------------- bot ---------------------
-@bot.message_handler(commands=['help', 'start'])
-def say_welcome(message):
-    user_first_name = str(message.chat.first_name) 
-    #bot.reply_to(message, f"Привет! {user_first_name} \n Добро пожаловать!")
-    bot.send_message(message.chat.id,
-                     'Добро пожаловать, ', user_first_name, '!\n',
-                     parse_mode='markdown')
+# @bot.message_handler(commands=['help', 'start'])
+# def say_welcome(message):
+#     user_first_name = str(message.chat.first_name)
+#     #bot.reply_to(message, f"Привет! {user_first_name} \n Добро пожаловать!")
+#     bot.send_message(message.chat.id,
+#                      'Добро пожаловать, ', user_first_name, '!\n',
+#                      parse_mode='markdown')
+
+@bot.message_handler(commands=["start"])
+def send_start(message):
+    username = message.from_user.username
+    start_message = config.get("Messages", "start")
+    bot.send_message(message.chat.id, start_message.format(username=username))
+
+
+@bot.message_handler(commands=["help"])
+def send_help(message):
+    bot.send_message(message.chat.id, config.get("Messages", "help"))
 
 
 @bot.message_handler(func=lambda message: True)

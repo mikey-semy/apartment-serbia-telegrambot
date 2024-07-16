@@ -1,0 +1,143 @@
+{
+  "captions": [
+    {
+      "type_menu": "Main",
+      "cpt_name": {
+        "ru": "Добро пожаловать",
+        "en": "Welcome"
+      }
+    },
+    {
+      "type_menu": "Language Selection",
+      "cpt_name": {
+        "ru": "Выбор языка",
+        "en": "Language Selection"
+      }
+    },
+    {
+      "type_menu": "City Selection",
+      "cpt_name": {
+        "ru": "Выбор города",
+        "en": "City Selection"
+      }
+    },
+    {
+      "type_menu": "Property Type",
+      "cpt_name": {
+        "ru": "Выбор типа жилья",
+        "en": "Property Type"
+      }
+    }
+  ],
+
+  "buttons": [
+    {
+      "type_menu": "Main",
+      "order_num": 1,
+      "btn_name": {
+        "ru": "Выбор языка",
+        "en": "Language Selection"
+      },
+      "btn_callback": "language_selection"
+    },
+    {
+      "type_menu": "Main",
+      "order_num": 2,
+      "btn_name": {
+        "ru": "Выбор города",
+        "en": "City Selection"
+      },
+      "btn_callback": "сity_selection"
+    },
+    {
+      "type_menu": "Main",
+      "order_num": 3,
+      "btn_name": {
+        "ru": "Выбор типа жилья",
+        "en": "Property Type"
+      },
+      "btn_callback": "property_type"
+    },
+    {
+      "type_menu": "Language Selection",
+      "order_num": 1,
+      "btn_name": {
+        "ru": "Русский",
+        "en": "Russian"
+      },
+      "btn_callback": "ru"
+    },
+    {
+      "type_menu": "Language Selection",
+      "order_num": 2,
+      "btn_name": {
+        "ru": "Английский",
+        "en": "English"
+      },
+      "btn_callback": "en"
+    },
+    {
+      "type_menu": "Language Selection",
+      "order_num": 3,
+      "btn_name": {
+        "ru": "Назад",
+        "en": "Back"
+      },
+      "btn_callback": "back"
+    },
+    {
+      "type_menu": "City Selection",
+      "order_num": 1,
+      "btn_name": {
+        "ru": "Белгород",
+        "en": "Belgorod"
+      },
+      "btn_callback": "belgorod"
+    },
+    {
+      "type_menu": "City Selection",
+      "order_num": 2,
+      "btn_name": {
+        "ru": "Москва",
+        "en": "Moscow"
+      },
+      "btn_callback": "moscow"
+    },
+    {
+      "type_menu": "City Selection",
+      "order_num": 3,
+      "btn_name": {
+        "ru": "Назад",
+        "en": "Back"
+      },
+      "btn_callback": "back"
+    },
+    {
+      "type_menu": "Property Type",
+      "order_num": 1,
+      "btn_name": {
+        "ru": "Дом",
+        "en": "House"
+      },
+      "btn_callback": "house"
+    },
+    {
+      "type_menu": "Property Type",
+      "order_num": 2,
+      "btn_name": {
+        "ru": "Квартира",
+        "en": "Apartment"
+      },
+      "btn_callback": "apartment"
+    },
+     {
+      "type_menu": "Property Type",
+      "order_num": 3,
+      "btn_name": {
+        "ru": "Назад",
+        "en": "Back"
+      },
+      "btn_callback": "back"
+    }
+  ]
+}

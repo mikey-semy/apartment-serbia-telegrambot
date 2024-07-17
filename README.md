@@ -2,3 +2,5 @@ ApartmentSerbiaBot - Бот для поиска квартир в Сербии. 
 
 Для разработки:
 https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/step_example.py
+
+https://emojipedia.org/rocket

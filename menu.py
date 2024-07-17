@@ -52,12 +52,12 @@ class CreateMenu:
                 result[button['btn_name'][self.selected_language]] = button['btn_callback']
         return result
 
-    def create_caption(self, type_menu: str) -> str:
+    def create_caption(self, type_menu: str, optional=None) -> str:
         '''Создание заголовка для заданного типа меню'''
         captions = self.elements['captions']
         for caption in captions:
             if caption['type_menu'] == type_menu:
-                return caption['cpt_name'][self.selected_language]
+                return caption['cpt_name'][self.selected_language].format(optional=optional)
 
     def create_menu(self, type_menu: str) -> types.InlineKeyboardMarkup:
         '''Создание меню для Telegram бота'''

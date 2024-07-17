@@ -2,9 +2,10 @@
   "captions": [
     {
       "type_menu": "main",
+      "_comment": "optional = first_name",
       "cpt_name": {
-        "ru": "🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {first_name}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).",
-        "en": "The bot is in development! 🔧 \nWelcome, {first_name}! \nSubscribe before you start (or don't subscribe 🙂)"
+        "ru": "🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {optional}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).",
+        "en": "The bot is in development! 🔧 \nWelcome, {optional}! \nSubscribe before you start (or don't subscribe 🙂)"
       }
     },
     {

@@ -45,9 +45,9 @@ def send_welcome(message):
     username = message.from_user.username
     first_name = message.from_user.first_name
     language_code = message.from_user.language_code
-
-    text = f'🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {first_name}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).'
-    bot.send_message(message.chat.id, text=text, reply_markup=subscribe)
+    bot.send_message(message.chat.id, text=cm.create_caption(MAIN, first_name), reply_markup=cm.create_menu(MAIN))
+    #text = f'🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {first_name}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).'
+    #bot.send_message(message.chat.id, text=text, reply_markup=subscribe)
 
 # Функция для обработки команды старт после подписок
 def handle_start_selection():

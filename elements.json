@@ -1,28 +1,28 @@
 {
   "captions": [
     {
-      "type_menu": "Main",
+      "type_menu": "main",
       "cpt_name": {
         "ru": "Добро пожаловать",
         "en": "Welcome"
       }
     },
     {
-      "type_menu": "Language Selection",
+      "type_menu": "language_selection",
       "cpt_name": {
         "ru": "Выбор языка",
         "en": "Language Selection"
       }
     },
     {
-      "type_menu": "City Selection",
+      "type_menu": "city_selection",
       "cpt_name": {
         "ru": "Выбор города",
         "en": "City Selection"
       }
     },
     {
-      "type_menu": "Property Type",
+      "type_menu": "property_type",
       "cpt_name": {
         "ru": "Выбор типа жилья",
         "en": "Property Type"
@@ -32,7 +32,7 @@
 
   "buttons": [
     {
-      "type_menu": "Main",
+      "type_menu": "main",
       "order_num": 1,
       "btn_name": {
         "ru": "Выбор языка",
@@ -41,16 +41,16 @@
       "btn_callback": "language_selection"
     },
     {
-      "type_menu": "Main",
+      "type_menu": "main",
       "order_num": 2,
       "btn_name": {
         "ru": "Выбор города",
         "en": "City Selection"
       },
-      "btn_callback": "сity_selection"
+      "btn_callback": "city_selection"
     },
     {
-      "type_menu": "Main",
+      "type_menu": "main",
       "order_num": 3,
       "btn_name": {
         "ru": "Выбор типа жилья",
@@ -59,7 +59,7 @@
       "btn_callback": "property_type"
     },
     {
-      "type_menu": "Language Selection",
+      "type_menu": "language_selection",
       "order_num": 1,
       "btn_name": {
         "ru": "Русский",
@@ -68,7 +68,7 @@
       "btn_callback": "ru"
     },
     {
-      "type_menu": "Language Selection",
+      "type_menu": "language_selection",
       "order_num": 2,
       "btn_name": {
         "ru": "Английский",
@@ -77,7 +77,7 @@
       "btn_callback": "en"
     },
     {
-      "type_menu": "Language Selection",
+      "type_menu": "language_selection",
       "order_num": 3,
       "btn_name": {
         "ru": "Назад",
@@ -86,7 +86,7 @@
       "btn_callback": "back"
     },
     {
-      "type_menu": "City Selection",
+      "type_menu": "city_selection",
       "order_num": 1,
       "btn_name": {
         "ru": "Белгород",
@@ -95,7 +95,7 @@
       "btn_callback": "belgorod"
     },
     {
-      "type_menu": "City Selection",
+      "type_menu": "city_selection",
       "order_num": 2,
       "btn_name": {
         "ru": "Москва",
@@ -104,7 +104,7 @@
       "btn_callback": "moscow"
     },
     {
-      "type_menu": "City Selection",
+      "type_menu": "city_selection",
       "order_num": 3,
       "btn_name": {
         "ru": "Назад",
@@ -113,7 +113,7 @@
       "btn_callback": "back"
     },
     {
-      "type_menu": "Property Type",
+      "type_menu": "property_type",
       "order_num": 1,
       "btn_name": {
         "ru": "Дом",
@@ -122,7 +122,7 @@
       "btn_callback": "house"
     },
     {
-      "type_menu": "Property Type",
+      "type_menu": "property_type",
       "order_num": 2,
       "btn_name": {
         "ru": "Квартира",
@@ -131,7 +131,7 @@
       "btn_callback": "apartment"
     },
      {
-      "type_menu": "Property Type",
+      "type_menu": "property_type",
       "order_num": 3,
       "btn_name": {
         "ru": "Назад",

@@ -1,4 +1,26 @@
 {
+    "types": [
+
+        {
+            "name": {
+                "ru": " ",
+                "rs": "Stambeni objekti",
+                "en": " "
+            },
+
+            "name": {
+                "ru": " ",
+                "rs": "Apartmani",
+                "en": " "
+            },
+
+            "name": {
+                "ru": " ",
+                "rs": "Zemljišta",
+                "en": " "
+            },
+        }
+    ],
     "cities": [
         {
             "name": {

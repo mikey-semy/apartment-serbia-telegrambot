@@ -1,0 +1,4 @@
+class GetData:
+
+    def __init__(self, data):
+        self.data = data

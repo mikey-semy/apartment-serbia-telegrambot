@@ -15,17 +15,23 @@ class CreateMenu:
 
     def __init__(self):
         '''Конструктор класса. Определяет файл json'''
-        self.__db_path = os.getcwd()                                        # Получаем текущий путь к директории
-        self.json_file = os.path.join(self.__db_path, 'elements.json')      # Формируем путь к файлу json
-        self.elements = self.__load_json()                                  # Загружаем данные из json файла
-        self.selected_language = 'en'                                       # Устанавливаем язык по умолчанию !!!нужно сделать запоминание выбранного ранее языка
+         # Получаем текущий путь к директории
+        self.__db_path = os.getcwd()
+        # Формируем путь к файлу json                                       
+        self.json_file = os.path.join(self.__db_path, 'elements.json')
+        # Загружаем данные из json файла      
+        self.elements = self.__load_json()
+        # Устанавливаем язык по умолчанию !!!нужно сделать запоминание выбранного ранее языка   
+        self.selected_language = 'en'    
 
     def set_language(self, language_code):
         '''Установка языка для меню'''
         if language_code in ['ru', 'en']:
-            self.selected_language = language_code                          # Проверяем, является ли язык допустимым
+            # Проверяем, является ли язык допустимым
+            self.selected_language = language_code                          
         else:
-            raise ValueError("Invalid language code")                       # Выбрасываем ошибку, если языковой код недопустимый
+            # Выбрасываем ошибку, если языковой код недопустимый
+            raise ValueError("Invalid language code")                       
     
     def get_language(self):
         '''Получение текущего языка'''

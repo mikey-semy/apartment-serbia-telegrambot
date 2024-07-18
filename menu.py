@@ -12,7 +12,9 @@ from telebot import types
 
 class CreateMenu:
 
-
+    DEFAULT_LANGUAGE = "en"
+    LANGUAGES = ["ru", "en"]
+    
     def __init__(self):
         '''Конструктор класса. Определяет файл json'''
          # Получаем текущий путь к директории
@@ -22,16 +24,18 @@ class CreateMenu:
         # Загружаем данные из json файла      
         self.elements = self.__load_json()
         # Устанавливаем язык по умолчанию !!!нужно сделать запоминание выбранного ранее языка   
-        self.selected_language = 'en'    
+        self.selected_language = self.DEFAULT_LANGUAGE   
 
     def set_language(self, language_code):
         '''Установка языка для меню'''
-        if language_code in ['ru', 'en']:
+        if language_code in self.LANGUAGES:
             # Проверяем, является ли язык допустимым
             self.selected_language = language_code                          
         else:
             # Выбрасываем ошибку, если языковой код недопустимый
-            raise ValueError("Invalid language code")                       
+            # raise ValueError("Invalid language code")
+            # Устанавливаем язык по-умолчанию
+            self.selected_language = self.DEFAULT_LANGUAGE                       
     
     def get_language(self):
         '''Получение текущего языка'''

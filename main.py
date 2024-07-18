@@ -42,12 +42,14 @@ subscribe = quick_markup({
 # Функция для обработки команды старт
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    username = message.from_user.username
-    first_name = message.from_user.first_name
+
+    # Установка языка по-умолчанию (из настроек пользователя)
     language_code = message.from_user.language_code
+    cm.set_language(language_code)
+
+    #Приветствие пользователя
+    first_name = message.from_user.first_name 
     bot.send_message(message.chat.id, text=cm.create_caption(MAIN, first_name), reply_markup=cm.create_menu(MAIN))
-    #text = f'🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {first_name}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).'
-    #bot.send_message(message.chat.id, text=text, reply_markup=subscribe)
 
 # Функция для обработки команды старт после подписок
 def handle_start_selection():
@@ -70,10 +72,6 @@ def handle_menu_selection(call, menu_type):
 @bot.message_handler(commands=['filter'])
 def send_filter(message):
     bot.reply_to(message, str(filter))
-
-@bot.message_handler(commands=['lang'])
-def send_filter(message):
-    bot.reply_to(message, str(message.from_user.language_code))
 
 # Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: True)

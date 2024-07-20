@@ -30,22 +30,26 @@ class WebScraper:
 class NekretnineScraper(WebScraper):
 
     def __init__(self, url, page_number=1):
-
+        self.constants = ConfigParser()
+        self.constants.read("constants.ini")
+        self.name = "nekretnine"
         self.url = url
-        self.constants = ConfigParser().read("constants.ini")
-
+        
         if page_number > 1:
-            self.url += self.constants.get("nekretnine", "NEXT_PAGE").format(optional=page_number) #f'stranica/{page_number}/'
+            self.url += self.ini("NEXT_PAGE", page_number) #f'stranica/{page_number}/'
         super().__init__(self.url, {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
         })
+
+    def ini(key, section=self.name, optional=None):
+        return self.constants.get(section, key).format(optional=optional)
 
     def scrape(self) -> list:
         soup = self.get_page(self.url)
         return self.scrape_page(soup)
 
     def has_next_page(self, soup) -> bool:
-        next_page_link = soup.find('a', class_='next-article-button')  # Признак окончания узнать, поправить.
+        next_page_link = soup.find('a', class_=self.ini("NEXT_BUTTON"))  # Признак окончания узнать, поправить.
         return next_page_link is not None
 
     def scrape_page(self, soup) -> list:
@@ -53,19 +57,19 @@ class NekretnineScraper(WebScraper):
         
         offers = []
         pattern = r"^\s+|\n|\r|\s+$"
-        offer_elements = soup.findAll('div', class_=self.constants.get("nekretnine", "OFFER_CLASS"))
+        offer_elements = soup.findAll('div', class_=self.ini("OFFER_CLASS"))
 
         for offer_element in offer_elements:
             self.scrape_pause()
 
-            title = offer_element.find('h2', class_=self.constants.get("nekretnine", "TITLE_CLASS"))
-            location = offer_element.find('p', class_=self.constants.get("nekretnine", "LOCATION_CLASS"))
-            rooms = offer_element.find('div', class_=self.constants.get("nekretnine", "ROOMS_CLASS"))
-            date_create = offer_element.find('div', class_=self.constants.get("nekretnine", "DATE_CREATE_CLASS"))
-            price = offer_element.find('p', class_=self.constants.get("nekretnine", "PRICE_CLASS"))
-            area = offer_element.find('p', class_=self.constants.get("nekretnine", "AREA_CLASS"))
-            url_offer = offer_element.find('h2', class_=self.constants.get("nekretnine", "LINK_HREF_OFFER_CLASS"))
-            url_image = offer_element.find('img', class_=self.constants.get("nekretnine", "IMG_SRC_OFFER_CLASS"))
+            title = offer_element.find('h2', class_=self.ini("TITLE_CLASS"))
+            location = offer_element.find('p', class_=self.ini("LOCATION_CLASS"))
+            rooms = offer_element.find('div', class_=self.ini("ROOMS_CLASS"))
+            date_create = offer_element.find('div', class_=self.ini("DATE_CREATE_CLASS"))
+            price = offer_element.find('p', class_=self.ini("PRICE_CLASS"))
+            area = offer_element.find('p', class_=self.ini("AREA_CLASS"))
+            url_offer = offer_element.find('h2', class_=self.ini("LINK_HREF_OFFER_CLASS"))
+            url_image = offer_element.find('img', class_=self.ini("IMG_SRC_OFFER_CLASS"))
 
             offers.append({
                 'title': re.sub(pattern, '', str(title.text)),
@@ -74,7 +78,7 @@ class NekretnineScraper(WebScraper):
                 'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
                 'price': price.find('span').text.strip(),
                 'area': area.find('span').text.strip(),
-                'url_offer': self.constants.get("nekretnine", "BASE_URL") + url_offer.find('a').get('href'),
+                'url_offer': self.ini("BASE_URL") + url_offer.find('a').get('href'),
                 'url_image': url_image.get('data-src')
             }) if title else '' # Исключаем результат без заголовка.
         return offers

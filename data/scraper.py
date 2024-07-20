@@ -1,104 +1,3 @@
-import requests
-from bs4 import BeautifulSoup
-import re
-import urllib3
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning) # Для https.
-
-class WebScraper:
-    def __init__(self, base_url, headers):
-        self.base_url = base_url
-        self.headers = headers
-
-    def get_page(self, url):
-        response = requests.get(url, headers=self.headers)
-        return BeautifulSoup(response.text, 'html.parser')
-
-    def scrape_page(self, soup):
-        # Для реализации в подклассах
-        raise NotImplementedError("Subclasses must implement this method")
-
-class NekretnineScraper(WebScraper):
-
-    def __init__(self, url, page_number = 1):
-        self.url = url
-        if page_number > 1:
-            self.url += f'stranica/{page_number}/'
-        super().__init__(self.url, {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
-        })
-        
-
-    def scrape(self):
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
-    
-    def has_next_page(self, soup):
-        next_page_link = soup.find('a', text='Sledeća stranica') # Признак окончания узнать, поправить.
-        return next_page_link is not None
-    
-    def scrape_page(self, soup):
-        # Скрейпинг nekretnine.rs
-
-        TITLE_CLASS = 'offer-title'
-        LOCATION_CLASS = 'offer-location'
-        ROOMS_CLASS = 'offer-meta-info'
-        DATE_CREATE_CLASS = 'offer-meta-info'
-        PRICE_CLASS = 'offer-price'
-        AREA_CLASS = 'offer-price--invert'
-        LINK_HREF_OFFER_CLASS='offer-title'
-        IMG_SRC_OFFER_CLASS='img-fluid'
-
-        offers = []
-        pattern = "^\s+|\n|\r|\s+$"
-        
-        offer_elements = soup.findAll('div', class_='offer')
-
-        for offer_element in offer_elements:
-            title       =       offer_element.find('h2',    class_=TITLE_CLASS)
-            location    =       offer_element.find('p',     class_=LOCATION_CLASS)
-            rooms       =       offer_element.find('div',   class_=ROOMS_CLASS)
-            date_create =       offer_element.find('div',   class_=DATE_CREATE_CLASS)
-            price       =       offer_element.find('p',     class_=PRICE_CLASS)
-            area        =       offer_element.find('p',     class_=AREA_CLASS)
-            url_offer   =       offer_element.find('h2',    class_=LINK_HREF_OFFER_CLASS)
-            url_image   =       offer_element.find('img',   class_=IMG_SRC_OFFER_CLASS)
-            
-            offers.append({
-                'title'        : re.sub(pattern, '', str(title.text)),
-                'location'     : re.sub(pattern, '', str(location.text)),
-                'rooms'        : re.sub(pattern, '', str(rooms.text)).split(' | ')[2],
-                'date_create'  : re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
-                'price'        : price.find('span').text.strip(),
-                'area'         : area.find('span').text.strip(),
-                'url_offer'    : url_offer.find('a').get('href'),
-                'url_image'    : url_image.get('data-src')
-            })
-        return offers
-    
-    
-    
-#Example - one page:
-#url = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
-#scraper = NekretnineScraper(url, 1)
-#offers = scraper.scrape()
-#print(offers)
-
-    
-#Example - some pages
-# page_number = 1
-# while True:
-#     scraper = NekretnineScraper(page_number)
-#     soup = scraper.get_page()
-#     offers = scraper.scrape_page(soup)
-#     print(offers)
-
-#     if not scraper.has_next_page(soup):
-#         break
-
-#     page_number += 1
-
-# Далее код ниже был в процессе наладки в другом ide, временно скопировал сюда, вечером все верну как надо.
 import time
 import random
 import os
@@ -106,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import urllib3
-
+from configparser import ConfigParser
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)  # Для https.
 
 
@@ -123,7 +22,7 @@ class WebScraper:
         # Для реализации в подклассах
         raise NotImplementedError("Subclasses must implement this method")
 
-    def scrape_pause(self, min=1, max=5):
+    def scrape_pause(self, min=1, max=2):
         delay = random.uniform(min, max)
         time.sleep(delay)
 
@@ -131,98 +30,78 @@ class WebScraper:
 class NekretnineScraper(WebScraper):
 
     def __init__(self, url, page_number=1):
+
         self.url = url
+        self.constants = ConfigParser().read("constants.ini")
+
         if page_number > 1:
-            self.url += f'stranica/{page_number}/'
+            self.url += self.constants.get("nekretnine", "NEXT_PAGE").format(optional=page_number) #f'stranica/{page_number}/'
         super().__init__(self.url, {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
         })
 
-    def scrape(self):
+    def scrape(self) -> list:
         soup = self.get_page(self.url)
         return self.scrape_page(soup)
 
-    def has_next_page(self, soup):
+    def has_next_page(self, soup) -> bool:
         next_page_link = soup.find('a', class_='next-article-button')  # Признак окончания узнать, поправить.
         return next_page_link is not None
 
-    def scrape_page(self, soup):
+    def scrape_page(self, soup) -> list:
         # Скрейпинг nekretnine.rs
-
-        TITLE_CLASS = 'offer-title'
-        LOCATION_CLASS = 'offer-location'
-        ROOMS_CLASS = 'offer-meta-info'
-        DATE_CREATE_CLASS = 'offer-meta-info'
-        PRICE_CLASS = 'offer-price'
-        AREA_CLASS = 'offer-price--invert'
-        LINK_HREF_OFFER_CLASS = 'offer-title'
-        IMG_SRC_OFFER_CLASS = 'img-fluid'
-
+        
         offers = []
-        pattern = "^\s+|\n|\r|\s+$"
-
-        offer_elements = soup.findAll('div', class_='offer')
+        pattern = r"^\s+|\n|\r|\s+$"
+        offer_elements = soup.findAll('div', class_=self.constants.get("nekretnine", "OFFER_CLASS"))
 
         for offer_element in offer_elements:
-
             self.scrape_pause()
 
-            title = offer_element.find('h2', class_=TITLE_CLASS)
-            location = offer_element.find('p', class_=LOCATION_CLASS)
-            rooms = offer_element.find('div', class_=ROOMS_CLASS)
-            date_create = offer_element.find('div', class_=DATE_CREATE_CLASS)
-            price = offer_element.find('p', class_=PRICE_CLASS)
-            area = offer_element.find('p', class_=AREA_CLASS)
-            url_offer = offer_element.find('h2', class_=LINK_HREF_OFFER_CLASS)
-            url_image = offer_element.find('img', class_=IMG_SRC_OFFER_CLASS)
+            title = offer_element.find('h2', class_=self.constants.get("nekretnine", "TITLE_CLASS"))
+            location = offer_element.find('p', class_=self.constants.get("nekretnine", "LOCATION_CLASS"))
+            rooms = offer_element.find('div', class_=self.constants.get("nekretnine", "ROOMS_CLASS"))
+            date_create = offer_element.find('div', class_=self.constants.get("nekretnine", "DATE_CREATE_CLASS"))
+            price = offer_element.find('p', class_=self.constants.get("nekretnine", "PRICE_CLASS"))
+            area = offer_element.find('p', class_=self.constants.get("nekretnine", "AREA_CLASS"))
+            url_offer = offer_element.find('h2', class_=self.constants.get("nekretnine", "LINK_HREF_OFFER_CLASS"))
+            url_image = offer_element.find('img', class_=self.constants.get("nekretnine", "IMG_SRC_OFFER_CLASS"))
 
             offers.append({
-                # 'title': title,
-                # 'location': location,
-                # 'rooms': rooms,
-                # 'date_create': date_create,
-                # 'price': price,
-                # 'area': area,
-                # 'url_offer': url_offer,
-                # 'url_image': url_image
-
-                'title': re.sub(pattern, '', str(title.text)) if title else '',
-                'location': re.sub(pattern, '', str(location.text)) if location else '',
-                'rooms': re.sub(pattern, '', str(rooms.text)).split(' | ')[2] if rooms else '',
-                'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0] if date_create else '',
-                'price': price.find('span').text.strip() if price else '',
-                'area': area.find('span').text.strip() if area else '',
-                'url_offer': url_offer.find('a').get('href') if url_offer else '',
-                'url_image': url_image.get('data-src') if url_image else ''
-            }) if title else ''
+                'title': re.sub(pattern, '', str(title.text)),
+                'location': re.sub(pattern, '', str(location.text)),
+                'rooms':  re.sub(pattern, '', str(rooms.text)).split(' | ')[2], # Нужно сделать проверку 
+                'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
+                'price': price.find('span').text.strip(),
+                'area': area.find('span').text.strip(),
+                'url_offer': self.constants.get("nekretnine", "BASE_URL") + url_offer.find('a').get('href'),
+                'url_image': url_image.get('data-src')
+            }) if title else '' # Исключаем результат без заголовка.
         return offers
+    
+    
+    def get_data(self, url, quantity_pages=2) -> list:
+        # For get data from nekretnine.rs
+        last_page_number = quantity_pages
+        current_page_number = 1
+        all_offers = []
+        
+        while True:
+            scraper = NekretnineScraper(url, current_page_number)
+            soup = scraper.get_page(url)
+            offers_from_page = scraper.scrape_page(soup)
+        
+            for offer in offers_from_page:
+                all_offers.append(offer)
+        
+            if not scraper.has_next_page(soup) or current_page_number == last_page_number:
+                break
+            current_page_number += 1
+        
+        return all_offers   
+ 
 
+# To check separately:
+#url = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
+#offers = get_data(url, 2)
 
-
-LAST_PAGE = 2
-# Example - some pages
-def get_data(url):
-    page_number = 1
-    while True:
-         scraper = NekretnineScraper(url, page_number)
-
-         soup = scraper.get_page(url)
-         # print("===>PAGE " + str(page_number) + ": \n" + str(soup))
-         offers = scraper.scrape_page(soup)
-         #print(offers, end='\n\n')
-         if not scraper.has_next_page(soup) or page_number == LAST_PAGE:
-             break
-         page_number += 1
-    return offers
-
-if __name__ == '__main__':
-    # Example - one page:
-    url = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
-    #scraper = NekretnineScraper(url, 1)
-    #offers = scraper.scrape()
-    #print(offers)
-
-    offers = get_data(url)
-    print(offers)
-    print(len(offers))
-    os.system("pause")

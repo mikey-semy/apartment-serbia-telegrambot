@@ -7,6 +7,19 @@ from bs4 import BeautifulSoup
 import re
 import urllib3
 
+
+from functools import wraps
+
+def timer(func):
+    @wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.time()
+        value = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Время выполнения {func.__name__!r}: {end_time - start_time} секунд")
+        return value
+    return wrapper_timer
+
 # Отключаем предупреждение о небезопасном запросе
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -38,9 +51,10 @@ class WebScraper:
         # Абстрактный метод, который должен быть реализован в подклассах
         raise NotImplementedError("Subclasses must implement this method")
 
-    def scrape_pause(self, min=1, max=2):
+    def scrape_pause(self, min=0.5, max=1):
         # Вводим задержку, чтобы предотвратить блокировку скрейпера
         delay = random.uniform(min, max)
+        print('Pause:', delay)
         time.sleep(delay)
 
 
@@ -81,7 +95,6 @@ class NekretnineScraper(WebScraper):
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
             rooms = offer_element.find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
-            date_create = offer_element.find(self.data["DATE_CREATE_TAG"], class_=self.data["DATE_CREATE_CLASS"])
             price = offer_element.find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
             area = offer_element.find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
             url_offer = offer_element.find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
@@ -92,12 +105,12 @@ class NekretnineScraper(WebScraper):
                 'title': re.sub(pattern, '', str(title.text)),
                 'location': re.sub(pattern, '', str(location.text)),
                 'rooms': re.sub(pattern, '', str(rooms.text)).split(' | ')[2],  # Нужно сделать проверку
-                'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
                 'price': price.find('span').text.strip(),
                 'area': area.find('span').text.strip(),
                 'url_offer': self.data["BASE_URL"] + url_offer.find('a').get('href'),
                 'url_image': url_image.get('data-src')
             }) if title else ''  # Исключаем результат без заголовка.
+            print('! ', self.name, ' - get offers: ', str(len(offers)))
         return offers
 
 class FourzidaScraper(WebScraper):
@@ -137,25 +150,25 @@ class FourzidaScraper(WebScraper):
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
             rooms = offer_element.find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
-            # date_create = offer_element.find(self.data["DATE_CREATE_TAG"], class_=self.data["DATE_CREATE_CLASS"])
             price = offer_element.find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
             area = offer_element.find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
             floor = offer_element.find(self.data["FLOOR_TAG"], class_=self.data["FLOOR_CLASS"])
             url_offer = offer_element.find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
             url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
-
+            
             # Очищаем данные и добавляем их в список предложений
             offers.append({
                 'title': re.sub(pattern, '', str(title.text)),
                 'location': re.sub(pattern, '', str(location.text)),
                 'rooms': re.sub(pattern, '', str(rooms.text)).split(' • ')[1],  # Нужно сделать проверку
-                # 'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
-                'price': price.find('span').text.strip(),
+                'price': price.text.strip(),
                 'area': re.sub(pattern, '', str(area.text)).split(' • ')[0],
-                'floor': re.sub(pattern, '', str(floor.text)).split(' • ')[2],
+                # 'floor': re.sub(pattern, '', str(floor.text)).split(' • ')[2],
                 'url_offer': self.data["BASE_URL"] + url_offer.get('href'),
                 'url_image': url_image.find('img').get('src')
             }) if title else ''  # Исключаем результат без заголовка.
+
+            print('! ', self.name, ' - get offers: ', str(len(offers)))
         return offers
 
 class CityexpertScraper(WebScraper):
@@ -195,23 +208,21 @@ class CityexpertScraper(WebScraper):
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
             rooms = offer_element.find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
-            # date_create = offer_element.find(self.data["DATE_CREATE_TAG"], class_=self.data["DATE_CREATE_CLASS"])
             price = offer_element.find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
-            area = offer_element.find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
-            floor = offer_element.find(self.data["FLOOR_TAG"], class_=self.data["FLOOR_CLASS"])
+            area = offer_element.findAll(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
+            # floor = offer_element.find(self.data["FLOOR_TAG"], class_=self.data["FLOOR_CLASS"])
             url_offer = offer_element.find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
             url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
-
+            
             # Очищаем данные и добавляем их в список предложений
             offers.append({
                 'title': re.sub(pattern, '', str(title.text)),
                 'location': re.sub(pattern, '', str(location.text)),
-                'rooms': re.sub(pattern, '', str(rooms.text)).split(' • ')[1],  # Нужно сделать проверку
-                # 'date_create': re.sub(pattern, '', str(date_create.text)).split(' | ')[0],
+                'rooms': re.sub(pattern, '', str(rooms[1].text)),  # Нужно сделать проверку
                 'price': price.find('span').text.strip(),
-                'area': re.sub(pattern, '', str(area.text)).split(' • ')[0],
-                'floor': re.sub(pattern, '', str(floor.text)).split(' • ')[2],
-                'url_offer': self.data["BASE_URL"] + url_offer.get('href'),
+                'area': re.sub(pattern, '', str(area[0].text)),
+                # 'floor': re.sub(pattern, '', str(floor.text)).split(' • ')[2],
+                'url_offer': self.data["BASE_URL"] + url_offer.find('a').get('href'),
                 'url_image': url_image.find('img').get('src')
             }) if title else ''  # Исключаем результат без заголовка.
         return offers
@@ -228,6 +239,7 @@ def get_scraper(url: str, page_number: int) -> object:
         raise ValueError("Unsupported URL")
 
 # Функция get_data собирает данные со всех страниц сайта
+@timer
 def get_data(urls: list, quantity_pages: int = 2) -> list:
     last_page_number = quantity_pages
     current_page_number = 1
@@ -250,8 +262,13 @@ def get_data(urls: list, quantity_pages: int = 2) -> list:
 urlNekretnine = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
 urlFourzida = 'https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?struktura=jednosoban&struktura=jednoiposoban&struktura=dvosoban&struktura=dvoiposoban&struktura=trosoban&vece_od=10m2&manje_od=60m2&skuplje_od=1000eur'
 urlCityexpert = 'https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1'
-urls = [urlNekretnine, urlFourzida, urlCityexpert]
+
+# urls = [urlNekretnine, urlFourzida, urlCityexpert]
+urls = [urlCityexpert]
 max_page = 2
+
 offers = get_data(urls, max_page)
-print(offers)
+
+
+print(f'Количество записей: {len(offers)}')
 

@@ -1,45 +1,81 @@
-class FilterBuilder:
+class UrlBuilder:
+    # Инициализация класса с базовым URL и стилем пути
+    def __init__(self, base_site, path_style=False):
+        self.base_site = base_site  # Базовый URL
+        self.path_style = path_style  # Флаг для определения стиля URL (path или query)
+        self.params = []  # Список для хранения параметров
 
-    def __init__(self) -> None:
-        self.filter = {}
+    # Метод для добавления параметра
+    def add_param(self, value):
+        self.params.append(value)  # Добавляем параметр в список
 
-    def add_filter(self, value:str) -> set:
-        self.filter.add(value)
-        return self.filter
+    # Метод для удаления параметра
+    def remove_param(self, value):
+        if self.path_style:
+            # Для path_style удаляем точное совпадение
+            self.params = [p for p in self.params if p != value]
+        else:
+            # Для query_style удаляем параметр, начинающийся с value=
+            self.params = [p for p in self.params if not p.startswith(f"{value}=")]
 
-    def remove_filter(self, value:str) -> set:
-        if value in self.filter:
-            self.filter.remove(value)
-        return self.filter
-    
-    def create_query_nekretnine(self, filter: set) -> str:
+    # Метод для построения итогового URL
+    def build_url(self):
+        if self.path_style:
+            # Для path_style соединяем параметры через '/'
+            return f"{self.base_site}/{'/'.join(self.params)}"
+        else:
+            if not self.params:
+                # Если нет параметров, возвращаем только базовый URL
+                return self.base_site
+            # Для query_style соединяем параметры через '&' и добавляем '?'
+            return f"{self.base_site}?{'&'.join(self.params)}"
 
-        # example: https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/
-        # example: https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/stranica/2/
-        # example: https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/kvadratura/10_400/lista/po-stranici/10/
+# # Пример использования:
+# url_builder = UrlBuilder("https://www.nekretnine.rs", path_style=True)
+# url_builder.add_param("stambeni-objekti")
+# url_builder.add_param("stanovi")
+# url_builder.add_param("izdavanje-prodaja")
+# url_builder.add_param("prodaja")
+
+# print(url_builder.build_url())
+
+# url_builder.remove_param("izdavanje-prodaja")
+# print(url_builder.build_url())
+
+# # Для URL с параметрами через ? и &
+# param_builder = UrlBuilder("https://www.4zida.rs")
+# param_builder.add_param("ptId=2,1")
+# param_builder.add_param("minPrice=10000")
+# param_builder.add_param("maxPrice=300000")
+
+# print(param_builder.build_url())
+
+# param_builder.remove_param("minPrice")
+# print(param_builder.build_url())
 
 
-        link = "https://www.nekretnine.rs/"
-        query = link + "/".join(filter) + "/po-stranici/10/"
-        return query
-    
-    def create_query_4zida(self, filter: set) -> str:
+# url_builder = UrlBuilder("https://www.4zida.rs", path_style=True)
 
-        # example: https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?vece_od=10m2&manje_od=60m2&skuplje_od=1000eur
-        # example: https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?oglasivac=agencija&vece_od=10m2&manje_od=60m2&strana=2&skuplje_od=1000eur
-        # example: https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?oglasivac=agencija&vece_od=10m2&manje_od=60m2&strana=3&skuplje_od=1000eur
+# # Добавляем path параметры
+# url_builder.add_param("prodaja-stanova")
+# url_builder.add_param("beograd")
+# url_builder.add_param("garsonjera")
+# url_builder.add_param("vlasnik")
+# url_builder.add_param("do-100000-evra")
 
-        link = "https://www.4zida.rs/"
-        query = link + "/".join(filter)
-        return query
-    
-    
-    def create_query_cityexpert(self, filter: set) -> str:
+# # Переключаемся на обычные параметры
+# url_builder.path_style = False
 
-        # example: https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1
-        # example: https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&currentPage=2&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1
-        # example: https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&currentPage=3&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1
+# # Добавляем query параметры
+# url_builder.add_param("struktura=jednosoban")
+# url_builder.add_param("struktura=jednoiposoban")
+# url_builder.add_param("struktura=dvosoban")
+# url_builder.add_param("struktura=dvoiposoban")
+# url_builder.add_param("struktura=trosoban")
+# url_builder.add_param("vece_od=10m2")
+# url_builder.add_param("manje_od=60m2")
+# url_builder.add_param("skuplje_od=1000eur")
 
-        link = "https://cityexpert.rs/"
-        query = link + "/".join(filter)
-        return query
+# # Формируем итоговую ссылку
+# final_url = url_builder.build_url()
+# print(final_url)

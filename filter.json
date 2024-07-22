@@ -1,180 +1,248 @@
-{
-    "types": [
+{   "nekretnine":
+    {
+        "apartaments":  "https://www.nekretnine.rs/apartmani/lista/po-stranici/10/",
+        "houses":       "https://www.nekretnine.rs/stambeni-objekti/lista/po-stranici/10/"
 
-        {
-            "name": {
-                "ru": " ",
-                "rs": "Stambeni objekti",
-                "en": " "
-            },
-
-            "name": {
-                "ru": " ",
-                "rs": "Apartmani",
-                "en": " "
-            },
-
-            "name": {
-                "ru": " ",
-                "rs": "Zemljišta",
-                "en": " "
-            },
+    },
+    "fourzida":
+    {
+        "apartaments":  "https://www.4zida.rs/prodaja-stanova",
+        "houses":       "https://www.4zida.rs/prodaja-kuca"
+    },
+    "cityexpert":
+    {
+        "apartaments": {
+            "beograd": "https://cityexpert.rs/prodaja-nekretnina/beograd",
+            "novi_sad": "https://cityexpert.rs/prodaja-nekretnina/novi-sad",
+            "nis": "https://cityexpert.rs/prodaja-nekretnina/nis"
         }
-    ],
-    "cities": [
-        {
-            "name": {
-                "ru": "Белград",
-                "rs": "Београд",
-                "en": "Belgrade"
-            },
-            "callback": "beograd"
-        },
-        {
-            "name": {
-                "ru": "Нови Сад",
-                "rs": "Нови Сад",
-                "en": "Novi Sad"
-            },
-            "callback": "novi_sad"
-        },
-        {
-            "name": {
-                "ru": "Ниш",
-                "rs": "Ниш",
-                "en": "Niš"
-            },
-            "callback": "nis"
-        },
-        {
-            "name": {
-                "ru": "Крагуевац",
-                "rs": "Крагујевац",
-                "en": "Kragujevac"
-            },
-            "callback": "kragujevac"
-        },
-        {
-            "name": {
-                "ru": "Суботица",
-                "rs": "Суботица",
-                "en": "Subotica"
-            },
-            "callback": "subotica"
-        },
-        {
-            "name": {
-                "ru": "Зренянин",
-                "rs": "Зрењанин",
-                "en": "Zrenjanin"
-            },
-            "callback": "zrenjanin"
-        },
-        {
-            "name": {
-                "ru": "Панчево",
-                "rs": "Панчево",
-                "en": "Pančevo"
-            },
-            "callback": "pancevo"
-        },
-        {
-            "name": {
-                "ru": "Чачак",
-                "rs": "Чачак",
-                "en": "Čačak"
-            },
-            "callback": "cacak"
-        },
-        {
-            "name": {
-                "ru": "Кралево",
-                "rs": "Кралево",
-                "en": "Kraljevo"
-            },
-            "callback": "kraljevo"
-        },
-        {
-            "name": {
-                "ru": "Смедерево",
-                "rs": "Смедерево",
-                "en": "Smederevo"
-            },
-            "callback": "smederevo"
-        },
-        {
-            "name": {
-                "ru": "Валево",
-                "rs": "Ваљево",
-                "en": "Valjevo"
-            },
-            "callback": "valjevo"
-        },
-        {
-            "name": {
-                "ru": "Шабац",
-                "rs": "Шабац",
-                "en": "Šabac"
-            },
-            "callback": "sabac"
-        },
-        {
-            "name": {
-                "ru": "Ужице",
-                "rs": "Ужице",
-                "en": "Užice"
-            },
-            "callback": "uzice"
-        },
-        {
-            "name": {
-                "ru": "Сремска Митровица",
-                "rs": "Сремска Митровица",
-                "en": "Sremska Mitrovica"
-            },
-            "callback": "sremska_mitrovica"
-        },
-        {
-            "name": {
-                "ru": "Крушевац",
-                "rs": "Крушевац",
-                "en": "Kruševac"
-            },
-            "callback": "krusevac"
-        },
-        {
-            "name": {
-                "ru": "Лесковац",
-                "rs": "Лесковац",
-                "en": "Leskovac"
-            },
-            "callback": "leskovac"
-        },
-        {
-            "name": {
-                "ru": "Вранье",
-                "rs": "Врање",
-                "en": "Vranje"
-            },
-            "callback": "vranje"
-        },
-        {
-            "name": {
-                "ru": "Зайечар",
-                "rs": "Зајечар",
-                "en": "Zaječar"
-            },
-            "callback": "zajecar"
-        },
-        {
-            "name": {
-                "ru": "Пожаревац",
-                "rs": "Пожаревац",
-                "en": "Požarevac"
-            },
-            "callback": "pozarevac"
-        }
-    ]
+    }
+
+}
+//     "types": [
+
+//         {
+//             "name": {
+//                 "ru": " ",
+//                 "rs": "Stambeni objekti",
+//                 "en": " "
+//             },
+
+//             "name": {
+//                 "ru": " ",
+//                 "rs": "Apartmani",
+//                 "en": " "
+//             },
+
+//             "name": {
+//                 "ru": " ",
+//                 "rs": "Zemljišta",
+//                 "en": " "
+//             },
+//         }
+//     ],
+//     "cities": [
+//         {
+//             "name": {
+//                 "ru": "Белград",
+//                 "rs": "Београд",
+//                 "en": "Belgrade"
+//             },
+//             "callback": "beograd"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Нови Сад",
+//                 "rs": "Нови Сад",
+//                 "en": "Novi Sad"
+//             },
+//             "callback": "novi_sad"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Ниш",
+//                 "rs": "Ниш",
+//                 "en": "Niš"
+//             },
+//             "callback": "nis"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Крагуевац",
+//                 "rs": "Крагујевац",
+//                 "en": "Kragujevac"
+//             },
+//             "callback": "kragujevac"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Суботица",
+//                 "rs": "Суботица",
+//                 "en": "Subotica"
+//             },
+//             "callback": "subotica"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Зренянин",
+//                 "rs": "Зрењанин",
+//                 "en": "Zrenjanin"
+//             },
+//             "callback": "zrenjanin"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Панчево",
+//                 "rs": "Панчево",
+//                 "en": "Pančevo"
+//             },
+//             "callback": "pancevo"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Чачак",
+//                 "rs": "Чачак",
+//                 "en": "Čačak"
+//             },
+//             "callback": "cacak"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Кралево",
+//                 "rs": "Кралево",
+//                 "en": "Kraljevo"
+//             },
+//             "callback": "kraljevo"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Смедерево",
+//                 "rs": "Смедерево",
+//                 "en": "Smederevo"
+//             },
+//             "callback": "smederevo"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Валево",
+//                 "rs": "Ваљево",
+//                 "en": "Valjevo"
+//             },
+//             "callback": "valjevo"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Шабац",
+//                 "rs": "Шабац",
+//                 "en": "Šabac"
+//             },
+//             "callback": "sabac"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Ужице",
+//                 "rs": "Ужице",
+//                 "en": "Užice"
+//             },
+//             "callback": "uzice"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Сремска Митровица",
+//                 "rs": "Сремска Митровица",
+//                 "en": "Sremska Mitrovica"
+//             },
+//             "callback": "sremska_mitrovica"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Крушевац",
+//                 "rs": "Крушевац",
+//                 "en": "Kruševac"
+//             },
+//             "callback": "krusevac"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Лесковац",
+//                 "rs": "Лесковац",
+//                 "en": "Leskovac"
+//             },
+//             "callback": "leskovac"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Вранье",
+//                 "rs": "Врање",
+//                 "en": "Vranje"
+//             },
+//             "callback": "vranje"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Зайечар",
+//                 "rs": "Зајечар",
+//                 "en": "Zaječar"
+//             },
+//             "callback": "zajecar"
+//         },
+//         {
+//             "name": {
+//                 "ru": "Пожаревац",
+//                 "rs": "Пожаревац",
+//                 "en": "Požarevac"
+//             },
+//             "callback": "pozarevac"
+//         }
+//     ]
 
     
-}
+// }
+
+// {
+//     "propertyType": {
+//       "sr": ["Stanovi", "Kuće", "Poslovni prostor"],
+//       "en": ["Apartments", "Houses", "Commercial property"],
+//       "ru": ["Квартиры", "Дома", "Коммерческая недвижимость"]
+//     },
+//     "transactionType": {
+//       "sr": ["Prodaja", "Izdavanje"],
+//       "en": ["Sale", "Rent"],
+//       "ru": ["Продажа", "Аренда"]
+//     },
+//     "location": {
+//       "sr": ["Grad", "Opština"],
+//       "en": ["City", "District"],
+//       "ru": ["Город", "Район"]
+//     },
+//     "price": {
+//       "sr": ["Minimalna cena", "Maksimalna cena"],
+//       "en": ["Minimum price", "Maximum price"],
+//       "ru": ["Минимальная цена", "Максимальная цена"]
+//     },
+//     "area": {
+//       "sr": ["Minimalna površina", "Maksimalna površina"],
+//       "en": ["Minimum area", "Maximum area"],
+//       "ru": ["Минимальная площадь", "Максимальная площадь"]
+//     },
+//     "rooms": {
+//       "sr": ["Garsonjera", "Jednosoban", "Jednoiposoban", "Dvosoban", "Dvoiposoban", "Trosoban", "Troiposoban", "4+ soba"],
+//       "en": ["Studio", "1 room", "1.5 rooms", "2 rooms", "2.5 rooms", "3 rooms", "3.5 rooms", "4+ rooms"],
+//       "ru": ["Студия", "1 комната", "1.5 комнаты", "2 комнаты", "2.5 комнаты", "3 комнаты", "3.5 комнаты", "4+ комнаты"]
+//     },
+//     "floor": {
+//       "sr": ["Minimalni sprat", "Maksimalni sprat"],
+//       "en": ["Minimum floor", "Maximum floor"],
+//       "ru": ["Минимальный этаж", "Максимальный этаж"]
+//     },
+//     "additionalFeatures": {
+//       "sr": ["Terasa", "Parking", "Lift", "Nameštaj", "Novogradnja", "Renovirano"],
+//       "en": ["Balcony/terrace", "Parking", "Elevator", "Furniture", "New building", "Renovated"],
+//       "ru": ["Балкон/терраса", "Парковка", "Лифт", "Мебель", "Новостройка", "Ремонт"]
+//     },
+//     "energyEfficiency": {
+//       "sr": ["Energetska efikasnost"],
+//       "en": ["Energy efficiency"],
+//       "ru": ["Энергоэффективность"]
+//     }
+//   }

@@ -207,7 +207,7 @@ class CityexpertScraper(WebScraper):
             # Извлекаем данные из элемента предложения
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
-            rooms = offer_element.find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
+            rooms = offer_element.findAll(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
             price = offer_element.find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
             area = offer_element.findAll(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
             # floor = offer_element.find(self.data["FLOOR_TAG"], class_=self.data["FLOOR_CLASS"])
@@ -218,13 +218,15 @@ class CityexpertScraper(WebScraper):
             offers.append({
                 'title': re.sub(pattern, '', str(title.text)),
                 'location': re.sub(pattern, '', str(location.text)),
-                'rooms': re.sub(pattern, '', str(rooms[1].text)),  # Нужно сделать проверку
+                'rooms': re.sub(pattern, '', str(rooms[1].text if rooms is not None else '')),  # Нужно сделать проверку
                 'price': price.find('span').text.strip(),
-                'area': re.sub(pattern, '', str(area[0].text)),
+                'area': re.sub(pattern, '', str(area[0].text if area is not None else '')),
                 # 'floor': re.sub(pattern, '', str(floor.text)).split(' • ')[2],
                 'url_offer': self.data["BASE_URL"] + url_offer.find('a').get('href'),
-                'url_image': url_image.find('img').get('src')
+                'url_image': url_image.find('img').get('src', '') if url_image is not None and url_image.find('img') is not None else ''
             }) if title else ''  # Исключаем результат без заголовка.
+            print('url_image: ', url_image)
+            print('! ', self.name, ' - get offers: ', str(len(offers)))
         return offers
 
 # Функция get_scraper возвращает объект скрейпера в зависимости от URL

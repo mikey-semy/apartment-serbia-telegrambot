@@ -1,7 +1,7 @@
 {
   "captions": [
     {
-      "type_menu": "main",
+      "type_menu": "welcome",
       "_comment": "optional = first_name",
       "cpt_name": {
         "ru": "🔧 Бот находится в разработке! 🔧 \nДобро пожаловать, {optional}! \nПодпишитесь перед тем как начать (или не подписывайтесь 🙂).",
@@ -9,10 +9,17 @@
       }
     },
     {
+      "type_menu": "menu",
+      "cpt_name": {
+        "ru": "Меню: ",
+        "en": "Menu:"
+      }
+    },
+    {
       "type_menu": "language_selection",
       "cpt_name": {
-        "ru": "Выбор языка",
-        "en": "Language Selection"
+        "ru": "Выберите язык",
+        "en": "Choose your language"
       }
     },
     {
@@ -33,7 +40,34 @@
 
   "buttons": [
     {
-      "type_menu": "main",
+      "type_menu": "welcome",
+      "order_num": 1,
+      "btn_name": {
+        "ru": "Подписаться",
+        "en": "Subscribe"
+      },
+      "btn_callback": "subscribe"
+    },
+    {
+      "type_menu": "welcome",
+      "order_num": 2,
+      "btn_name": {
+        "ru": "Помощь",
+        "en": "Help"
+      },
+      "btn_callback": "help"
+    },
+    {
+      "type_menu": "welcome",
+      "order_num": 3,
+      "btn_name": {
+        "ru": "Меню",
+        "en": "Menu"
+      },
+      "btn_callback": "main"
+    },
+    {
+      "type_menu": "welcome",
       "order_num": 1,
       "btn_name": {
         "ru": "Выбор языка",
@@ -63,8 +97,8 @@
       "type_menu": "language_selection",
       "order_num": 1,
       "btn_name": {
-        "ru": "Русский",
-        "en": "Russian"
+        "ru": "🇷🇺 Русский",
+        "en": "🇷🇺 Russian"
       },
       "btn_callback": "ru"
     },
@@ -72,8 +106,8 @@
       "type_menu": "language_selection",
       "order_num": 2,
       "btn_name": {
-        "ru": "Английский",
-        "en": "English"
+        "ru": "🇬🇧 Английский",
+        "en": "🇬🇧 English"
       },
       "btn_callback": "en"
     },

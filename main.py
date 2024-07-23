@@ -17,6 +17,8 @@ class User:
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 cm = CreateMenu()
 
+CHANNEL_IDS = ["@MikeDaily"]
+
 # Константы выбора языка
 LANG_RU = 'ru'
 LANG_EN = 'en'
@@ -38,6 +40,18 @@ subscribe = quick_markup({
     'Github': {'url': 'https://github.com/MikhailTo', 'callback_data': 'scribe_gh'},
     'Уже подписан': {'callback_data': 'start'}
 }, row_width=2)
+
+@bot.message_handler(content_types=['text'])
+def check_subscriptions(message):
+    subscribed_channels = []
+    for channel_id in CHANNEL_IDS:
+        chat_member = bot.get_chat_member(channel_id, message.from_user.id)
+        if chat_member.status in ['member', 'creator', 'administrator']:
+            subscribed_channels.append(channel_id)
+    if subscribed_channels:
+        bot.send_message(message.chat.id, f'You are subscribed to the following channels: {", ".join(subscribed_channels)}')
+    else:
+        bot.send_message(message.chat.id, 'You are not subscribed to any of the channels.')
 
 # Функция для обработки команды старт
 @bot.message_handler(commands=["start"])

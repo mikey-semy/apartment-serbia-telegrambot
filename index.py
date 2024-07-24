@@ -1,5 +1,5 @@
 import telebot
-from main import bot
+from bot.main import bot
 
 def handler(event, _):
     message = telebot.types.Update.de_json(event['body'])

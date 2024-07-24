@@ -1,11 +1,11 @@
 import os
 import json
 import telebot
-from language import SelectLanguage
 
 class CreateMenu:
     def __init__(self, bot, lang):
         self.bot = bot
+        self.lang = lang
         '''Конструктор класса. Определяет файл json'''
         self.name_json_file = 'menu.json'
          # Получаем текущий путь к директории
@@ -29,9 +29,9 @@ class CreateMenu:
 
     def __create_markup(self, menu_item):
         markup = telebot.types.InlineKeyboardMarkup()
-        print('Menu: ', lang.selected_language)
+        print('Menu: ', self.lang.selected_language)
         for button in menu_item['buttons']:
-            markup.add(telebot.types.InlineKeyboardButton(text=lang.get_language(button['label']), callback_data=button['callback_data']))
+            markup.add(telebot.types.InlineKeyboardButton(text=self.lang.get_language(button['label']), callback_data=button['callback_data']))
         return markup
 
     def callback(self, call, data=None):
@@ -39,11 +39,11 @@ class CreateMenu:
         menu_item = self.menu[menu_id]
         if menu_item:
             markup = self.__create_markup(menu_item)
-            self.bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=lang.get_language(menu_item['label']), reply_markup=markup)
+            self.bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=self.lang.get_language(menu_item['label']), reply_markup=markup)
         else:
-            self.bot.answer_callback_query(call.id, text=lang.get_language('error_message_not_menu_item'))
+            self.bot.answer_callback_query(call.id, text=self.lang.get_language('error_message_not_menu_item'))
 
     def create_menu(self, message, type_menu='menu_main'):
         menu_item = self.__get_menu_item(type_menu)
         markup = self.__create_markup(menu_item)
-        self.bot.send_message(message.from_user.id, text=lang.get_language(menu_item['label']), reply_markup=markup)
+        self.bot.send_message(message.from_user.id, text=self.lang.get_language(menu_item['label']), reply_markup=markup)

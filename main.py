@@ -6,21 +6,52 @@ from filter import UrlBuilder
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 menu = CreateMenu(bot)
-sl = SelectLanguage()
+lang = SelectLanguage()
 
 CHANNEL_IDS = ["@MikeDaily"]
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
-    menu.callback(call)
+    if "menu" in call.data:
+
+        menu.callback(call)
+
+    elif "action" in call.data:
+            
+            if call.data == "action_ru":
+                handle_language_selection(call, "ru")
+            elif call.data == "action_en":
+                handle_language_selection(call, "ru")
+            else:
+                 print(f"Unknown action callback data: {call.data}")
+    else:
+        print(f"Unknown menu callback data: {call.data}")
+
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
-
-    sl.set_language(message.from_user.language_code)
-
+    
+    # Установка языка по-умолчанию (из настроек пользователя)
+    lang.set_language(message.from_user.language_code)
+    # Создание главного меню
     menu.create_menu(message)
+
+# Функция для обработки языкового выбора
+def handle_language_selection(call, language):
+    lang.set_language(language)
+    menu.callback(call, "menu_change_language")
+    #menu.callback(call, "menu_main")
+
+@bot.message_handler(commands=['ru'])
+def send_filter(message):
+    lang.set_language("ru")
+    bot.reply_to(message, lang.selected_language)
+
+@bot.message_handler(commands=['en'])
+def send_filter(message):
+    lang.set_language("en")
+    bot.reply_to(message, lang.selected_language)
 
 # # Обработчик callback-запросов
 # @bot.callback_query_handler(func=lambda call: True)
@@ -47,10 +78,6 @@ def start(message):
 #         handle_menu_selection(call, MAIN)
 #     else:
 #         print(f"Unknown callback data: {call.data}")
-
-# CITIES = ['belgorod', 'moscow']
-# TYPES = ['apartment', 'house']
-# filter = []
 
 
 # @bot.message_handler(content_types=['text'])

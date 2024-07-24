@@ -31,8 +31,8 @@ class CreateMenu:
             markup.add(telebot.types.InlineKeyboardButton(self.sl.get_language(button['label']), callback_data=button['callback_data']))
         return markup
 
-    def callback(self, call):
-        menu_id = call.data
+    def callback(self, call, data=None):
+        menu_id = call.data if data == None else data
         menu_item = self.menu[menu_id]
         if menu_item:
             markup = self.__create_markup(menu_item)

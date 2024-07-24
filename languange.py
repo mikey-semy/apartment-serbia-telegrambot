@@ -2,7 +2,7 @@ import os
 import json
 
 class SelectLanguage:
-    def __init__(self, message) -> None:
+    def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
         self.name_json_file = 'language.json'
          # Получаем текущий путь к директории
@@ -16,7 +16,7 @@ class SelectLanguage:
 
     def __load_json(self):
         '''Функция загрузки JSON файла'''
-        with open(self.json_file, 'r') as f:
+        with open(self._json_file, 'r') as f:
             return json.load(f)
         
     def set_language(self, language_code):

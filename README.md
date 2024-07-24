@@ -5,4 +5,4 @@ https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/step_example.
 
 https://emojipedia.org/
 
-zip -r sources.zip .
+https://github.com/mskozlova/ydb_serverless_telegram_bot/tree/main

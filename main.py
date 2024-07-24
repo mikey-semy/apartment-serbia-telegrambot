@@ -8,9 +8,7 @@ bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
 
-print('Main create lang: ', lang.selected_language)
-CHANNEL_IDS = ["@MikeDaily"]
-
+# Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     if "menu" in call.data:
@@ -29,6 +27,17 @@ def callback(call):
         print(f"Unknown menu callback data: {call.data}")
 
 
+# @bot.message_handler(content_types=['text'])
+# def check_subscriptions(message):
+#     subscribed_channels = ["@MikeDaily"]
+#     for channel_id in subscribed_channels:
+#         chat_member = bot.get_chat_member(channel_id, message.from_user.id)
+#         if chat_member.status in ['member', 'creator', 'administrator']:
+#             subscribed_channels.append(channel_id)
+#     if subscribed_channels:
+#         bot.send_message(message.chat.id, f'You are subscribed to the following channels: {", ".join(subscribed_channels)}')
+#     else:
+#         bot.send_message(message.chat.id, 'You are not subscribed to any of the channels.')
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -36,52 +45,13 @@ def start(message):
     # Установка языка по-умолчанию (из настроек пользователя)
     lang.set_language(message.from_user.language_code)
     # Создание главного меню
-    print('Main create menu: ', lang.selected_language)
     menu.create_menu(message)
 
 # Функция для обработки языкового выбора
 def handle_language_selection(call, language):
     lang.set_language(language)
-    print(f'{language}: ', lang.selected_language)
     menu.callback(call, "menu_change_language")
     #menu.callback(call, "menu_main")
-
-@bot.message_handler(commands=['ru'])
-def send_filter(message):
-    lang.set_language("ru")
-    bot.reply_to(message, lang.selected_language)
-
-@bot.message_handler(commands=['en'])
-def send_filter(message):
-    lang.set_language("en")
-    bot.reply_to(message, lang.selected_language)
-
-# # Обработчик callback-запросов
-# @bot.callback_query_handler(func=lambda call: True)
-# def callback_inline(call):
-#     if call.data == MAIN:
-#         handle_main_selection(call.message)
-#     # elif call.data == HELP:
-#     #     handle_help_selection(call, HELP)
-#     elif call.data == LANG_RU:
-#         handle_language_selection(call, LANG_RU)
-#     elif call.data == LANG_EN:
-#         handle_language_selection(call, LANG_EN)
-#     elif call.data in CITIES:
-#         handle_filter_selection(call, CITY_SELECTION)
-#     elif call.data in TYPES:
-#         handle_filter_selection(call, PROPERTY_TYPE)
-#     elif call.data == LANGUAGE_SELECTION:
-#         handle_menu_selection(call, LANGUAGE_SELECTION)
-#     elif call.data == CITY_SELECTION:
-#         handle_menu_selection(call, CITY_SELECTION)
-#     elif call.data == PROPERTY_TYPE:
-#         handle_menu_selection(call, PROPERTY_TYPE)
-#     elif call.data == BACK:
-#         handle_menu_selection(call, MAIN)
-#     else:
-#         print(f"Unknown callback data: {call.data}")
-
 
 # @bot.message_handler(content_types=['text'])
 # def check_subscriptions(message):
@@ -131,8 +101,6 @@ def send_filter(message):
 # def send_filter(message):
 #     bot.reply_to(message, str(filter))
 
-
-
 # # Define the callback function
 # @bot.callback_query_handler(func=lambda call: True)
 # def callback(call):
@@ -153,33 +121,6 @@ def send_filter(message):
 #     for button in menu['main']['buttons']:
 #         markup.add(telebot.types.InlineKeyboardButton(button['label'], callback_data=button['callback_data']))
 #     bot.send_message(message.from_user.id, menu['main']['label'], reply_markup=markup)
-
-
-# # Обработчик callback-запросов
-# @bot.callback_query_handler(func=lambda call: True)
-# def callback_inline(call):
-#     if call.data == MAIN:
-#         handle_main_selection(call.message)
-#     # elif call.data == HELP:
-#     #     handle_help_selection(call, HELP)
-#     elif call.data == LANG_RU:
-#         handle_language_selection(call, LANG_RU)
-#     elif call.data == LANG_EN:
-#         handle_language_selection(call, LANG_EN)
-#     elif call.data in CITIES:
-#         handle_filter_selection(call, CITY_SELECTION)
-#     elif call.data in TYPES:
-#         handle_filter_selection(call, PROPERTY_TYPE)
-#     elif call.data == LANGUAGE_SELECTION:
-#         handle_menu_selection(call, LANGUAGE_SELECTION)
-#     elif call.data == CITY_SELECTION:
-#         handle_menu_selection(call, CITY_SELECTION)
-#     elif call.data == PROPERTY_TYPE:
-#         handle_menu_selection(call, PROPERTY_TYPE)
-#     elif call.data == BACK:
-#         handle_menu_selection(call, MAIN)
-#     else:
-#         print(f"Unknown callback data: {call.data}")
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

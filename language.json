@@ -1,41 +1,43 @@
 {
-    "default_language": "en",
+    "default_language": "ru",
     
     "languages": ["ru", "en"],
 
     "ru":
-        {   "error_message_not_menu_item": "Ошибка!",
+        {   
+            "error_message_not_menu_item": "Ошибка!",
             "label_main": "Главное меню",
-            "label_change_language": "Изменить язык",
-            "label_filter": "",
+            "label_change_language": "Выберите язык",
+            "label_filter": "Фильтр",
             "label_help": "Помощь",
-            "button_change_language": "",
-            "button_filter": "",
-            "button_help": "",
-            "button_ru": "",
-            "button_en": "",
-            "button_back": "",
-            "button_city": "",
-            "button_type": "",
-            "button_about": "",
-            "button_instruction": ""
+            "button_change_language": "Изменить язык",
+            "button_filter": "Фильтр",
+            "button_help": "Помощь",
+            "button_ru": "Русский",
+            "button_en": "Английский",
+            "button_back": "Назад",
+            "button_city": "Выбрать город",
+            "button_type": "Выбрать тип",
+            "button_about": "О нас",
+            "button_instruction": "Инструкция"
         },
     
     "en": 
         {
             "error_message_not_menu_item": "Error!",
             "label_main": "Main menu",
-            "label_change_language": "Change language",
-            "label_filter": "",
+            "label_change_language": "Your language",
+            "label_filter": "Filter",
             "label_help": "Help",
-            "button_filter": "",
-            "button_help": "",
-            "button_ru": "",
-            "button_en": "",
-            "button_back": "",
-            "button_city": "",
-            "button_type": "",
-            "button_about": "",
-            "button_instruction": ""
+            "button_change_language": "Change language",
+            "button_filter": "Filter",
+            "button_help": "Help",
+            "button_ru": "Russian",
+            "button_en": "English",
+            "button_back": "Back",
+            "button_city": "Select city",
+            "button_type": "Select type",
+            "button_about": "About us",
+            "button_instruction": "Instruction"
         }
 }

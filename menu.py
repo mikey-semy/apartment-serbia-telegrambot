@@ -11,7 +11,7 @@ class CreateMenu:
          # Получаем текущий путь к директории
         self.__db_path = os.getcwd()
         # Формируем путь к файлу json                                       
-        self.json_file = os.path.join(self.__db_path, self.name_json_file)
+        self.__json_file = os.path.join(self.__db_path, self.name_json_file)
         # Загружаем данные из json файла      
         self.menu = self.__load_json()
 
@@ -20,9 +20,9 @@ class CreateMenu:
     def __load_json(self):
         '''Функция загрузки JSON файла'''
         try:
-            with open(self.json_file, 'r') as f:
+            with open(self.__json_file, 'r') as f:
                 return json.load(f)
-        except (JSONDecodeError, FileNotFoundError) as e:
+        except (json.JSONDecodeError, FileNotFoundError) as e:
             print(f"Error loading JSON file: {e}")
             return {}
             
@@ -31,8 +31,9 @@ class CreateMenu:
 
     def __create_markup(self, menu_item):
         markup = telebot.types.InlineKeyboardMarkup()
+        print('Menu: ', self.sl.selected_language)
         for button in menu_item['buttons']:
-            markup.add(telebot.types.InlineKeyboardButton(self.sl.get_language(button['label']), callback_data=button['callback_data']))
+            markup.add(telebot.types.InlineKeyboardButton(text=self.sl.get_language(button['label']), callback_data=button['callback_data']))
         return markup
 
     def callback(self, call, data=None):
@@ -47,4 +48,4 @@ class CreateMenu:
     def create_menu(self, message, type_menu='menu_main'):
         menu_item = self.__get_menu_item(type_menu)
         markup = self.__create_markup(menu_item)
-        self.bot.send_message(message.from_user.id, self.sl.get_language(menu_item['label']), reply_markup=markup)
+        self.bot.send_message(message.from_user.id, text=self.sl.get_language(menu_item['label']), reply_markup=markup)

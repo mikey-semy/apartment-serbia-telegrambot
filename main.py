@@ -7,7 +7,7 @@ from language import SelectLanguage
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 menu = CreateMenu(bot)
 lang = SelectLanguage()
-
+print('Main create lang: ', lang.selected_language)
 CHANNEL_IDS = ["@MikeDaily"]
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -19,9 +19,9 @@ def callback(call):
     elif "action" in call.data:
             
             if call.data == "action_ru":
-                handle_language_selection(call, "ru")
+                handle_language_selection(call, "ru")               
             elif call.data == "action_en":
-                handle_language_selection(call, "ru")
+                handle_language_selection(call, "en")
             else:
                  print(f"Unknown action callback data: {call.data}")
     else:
@@ -35,11 +35,13 @@ def start(message):
     # Установка языка по-умолчанию (из настроек пользователя)
     lang.set_language(message.from_user.language_code)
     # Создание главного меню
+    print('Main create menu: ', lang.selected_language)
     menu.create_menu(message)
 
 # Функция для обработки языкового выбора
 def handle_language_selection(call, language):
     lang.set_language(language)
+    print(f'{language}: ', lang.selected_language)
     menu.callback(call, "menu_change_language")
     #menu.callback(call, "menu_main")
 

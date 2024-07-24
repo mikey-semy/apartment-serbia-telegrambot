@@ -8,7 +8,7 @@ class SelectLanguage:
          # Получаем текущий путь к директории
         self.__db_path = os.getcwd()
         # Формируем путь к файлу json                                       
-        self._json_file = os.path.join(self.__db_path, self.name_json_file)
+        self.__json_file = os.path.join(self.__db_path, self.name_json_file)
         # Загружаем данные из json файла      
         self.language = self.__load_json()
         
@@ -17,9 +17,9 @@ class SelectLanguage:
     def __load_json(self):
         '''Функция загрузки JSON файла'''
         try:
-            with open(self.json_file, 'r') as f:
+            with open(self.__json_file, 'r') as f:
                 return json.load(f)
-        except (JSONDecodeError, FileNotFoundError) as e:
+        except (json.JSONDecodeError, FileNotFoundError) as e:
             print(f"Error loading JSON file: {e}")
             return {}
         

@@ -5,8 +5,9 @@ from language import SelectLanguage
 #from filter import UrlBuilder
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
-menu = CreateMenu(bot)
 lang = SelectLanguage()
+menu = CreateMenu(bot, lang)
+
 print('Main create lang: ', lang.selected_language)
 CHANNEL_IDS = ["@MikeDaily"]
 

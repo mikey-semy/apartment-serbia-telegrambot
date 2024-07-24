@@ -16,8 +16,12 @@ class SelectLanguage:
 
     def __load_json(self):
         '''Функция загрузки JSON файла'''
-        with open(self._json_file, 'r') as f:
-            return json.load(f)
+        try:
+            with open(self.json_file, 'r') as f:
+                return json.load(f)
+        except (JSONDecodeError, FileNotFoundError) as e:
+            print(f"Error loading JSON file: {e}")
+            return {}
         
     def set_language(self, language_code):
         if language_code in self.language["languages"]:
@@ -25,9 +29,12 @@ class SelectLanguage:
             self.selected_language = language_code                          
         else:
             # Выбрасываем ошибку, если языковой код недопустимый
-            # raise ValueError("Invalid language code")
+            raise ValueError("Invalid language code")
             # Устанавливаем язык по-умолчанию
-            self.selected_language = self.language["default_language"]                     
+            # self.selected_language = self.language["default_language"]                     
     
     def get_language(self, text):
-        return self.language[self.selected_language][text]
+        try:
+            return self.language[self.selected_language][text]
+        except KeyError:
+            return f"Error: unknown text '{text}' for language '{self.selected_language}'"

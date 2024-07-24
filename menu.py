@@ -19,9 +19,13 @@ class CreateMenu:
 
     def __load_json(self):
         '''Функция загрузки JSON файла'''
-        with open(self.json_file, 'r') as f:
-            return json.load(f)
-        
+        try:
+            with open(self.json_file, 'r') as f:
+                return json.load(f)
+        except (JSONDecodeError, FileNotFoundError) as e:
+            print(f"Error loading JSON file: {e}")
+            return {}
+            
     def __get_menu_item(self, menu_id):
         return self.menu[menu_id]
 
@@ -40,7 +44,7 @@ class CreateMenu:
         else:
             self.bot.answer_callback_query(call.id, text=self.sl.get_language('error_message_not_menu_item'))
 
-    def create_menu(self, message, type_menu='main'):
+    def create_menu(self, message, type_menu='menu_main'):
         menu_item = self.__get_menu_item(type_menu)
         markup = self.__create_markup(menu_item)
         self.bot.send_message(message.from_user.id, self.sl.get_language(menu_item['label']), reply_markup=markup)

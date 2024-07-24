@@ -1,27 +1,52 @@
 import os
 import telebot
-from telebot import types
 from menu import CreateMenu
-from telebot.util import quick_markup
+from language import SelectLanguage
+from filter import UrlBuilder
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
-cm = CreateMenu()
+menu = CreateMenu(bot)
+sl = SelectLanguage()
 
 CHANNEL_IDS = ["@MikeDaily"]
 
-# Константы выбора языка
-LANG_RU = 'ru'
-LANG_EN = 'en'
+@bot.callback_query_handler(func=lambda call: True)
+def callback(call):
+    menu.callback(call)
 
-# Константы типов меню
-START = 'start'
-WELCOME = 'welcome'
-MAIN = 'main'
-HELP = 'help'
-LANGUAGE_SELECTION = 'language_selection'
-CITY_SELECTION = 'city_selection'
-PROPERTY_TYPE = 'property_type'
-BACK = 'back'
+
+@bot.message_handler(commands=['start'])
+def start(message):
+
+    sl.set_language(message.from_user.language_code)
+
+    menu.create_menu(message)
+
+# # Обработчик callback-запросов
+# @bot.callback_query_handler(func=lambda call: True)
+# def callback_inline(call):
+#     if call.data == MAIN:
+#         handle_main_selection(call.message)
+#     # elif call.data == HELP:
+#     #     handle_help_selection(call, HELP)
+#     elif call.data == LANG_RU:
+#         handle_language_selection(call, LANG_RU)
+#     elif call.data == LANG_EN:
+#         handle_language_selection(call, LANG_EN)
+#     elif call.data in CITIES:
+#         handle_filter_selection(call, CITY_SELECTION)
+#     elif call.data in TYPES:
+#         handle_filter_selection(call, PROPERTY_TYPE)
+#     elif call.data == LANGUAGE_SELECTION:
+#         handle_menu_selection(call, LANGUAGE_SELECTION)
+#     elif call.data == CITY_SELECTION:
+#         handle_menu_selection(call, CITY_SELECTION)
+#     elif call.data == PROPERTY_TYPE:
+#         handle_menu_selection(call, PROPERTY_TYPE)
+#     elif call.data == BACK:
+#         handle_menu_selection(call, MAIN)
+#     else:
+#         print(f"Unknown callback data: {call.data}")
 
 # CITIES = ['belgorod', 'moscow']
 # TYPES = ['apartment', 'house']
@@ -77,63 +102,27 @@ BACK = 'back'
 #     bot.reply_to(message, str(filter))
 
 
-lang = {
-    'ru':
-        {
-            'Main menu': 'Главное меню',
-            'Change language': 'Изменить язык',
-            'Help': 'Помощь'
-        }
-}
 
-# Define the menu structure
-menu = {
-    'main': {
-        'label': lang['ru']['Main menu'],
-        'buttons': [
-            {'label': 'Подменю 1', 'callback_data': 'submenu1'},
-            {'label': 'Подменю 2', 'callback_data': 'submenu2'},
-            {'label': 'Выход', 'callback_data': 'exit'}
-        ]
-    },
-    'submenu1': {
-        'label': lang['ru']['Change language'],
-        'buttons': [
-            {'label': 'Опция 1', 'callback_data': 'option1'},
-            {'label': 'Опция 2', 'callback_data': 'option2'},
-            {'label': 'Назад', 'callback_data': 'main'}
-        ]
-    },
-    'submenu2': {
-        'label': lang['ru']['Help'],
-        'buttons': [
-            {'label': 'Опция 3', 'callback_data': 'option3'},
-            {'label': 'Опция 4', 'callback_data': 'option4'},
-            {'label': 'Назад', 'callback_data': 'main'}
-        ]
-    }
-}
+# # Define the callback function
+# @bot.callback_query_handler(func=lambda call: True)
+# def callback(call):
+#     menu_id = call.data
+#     menu_item = menu.get(menu_id)
+#     if menu_item:
+#         markup = telebot.types.InlineKeyboardMarkup()
+#         for button in menu_item['buttons']:
+#             markup.add(telebot.types.InlineKeyboardButton(button['label'], callback_data=button['callback_data']))
+#         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=menu_item['label'], reply_markup=markup)
+#     else:
+#         bot.answer_callback_query(call.id, text='Ошибка')
 
-# Define the callback function
-@bot.callback_query_handler(func=lambda call: True)
-def callback(call):
-    menu_id = call.data
-    menu_item = menu.get(menu_id)
-    if menu_item:
-        markup = telebot.types.InlineKeyboardMarkup()
-        for button in menu_item['buttons']:
-            markup.add(telebot.types.InlineKeyboardButton(button['label'], callback_data=button['callback_data']))
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=menu_item['label'], reply_markup=markup)
-    else:
-        bot.answer_callback_query(call.id, text='Ошибка')
-
-# Define the start command
-@bot.message_handler(commands=['start'])
-def start(message):
-    markup = telebot.types.InlineKeyboardMarkup()
-    for button in menu['main']['buttons']:
-        markup.add(telebot.types.InlineKeyboardButton(button['label'], callback_data=button['callback_data']))
-    bot.send_message(message.from_user.id, menu['main']['label'], reply_markup=markup)
+# # Define the start command
+# @bot.message_handler(commands=['start'])
+# def start(message):
+#     markup = telebot.types.InlineKeyboardMarkup()
+#     for button in menu['main']['buttons']:
+#         markup.add(telebot.types.InlineKeyboardButton(button['label'], callback_data=button['callback_data']))
+#     bot.send_message(message.from_user.id, menu['main']['label'], reply_markup=markup)
 
 
 # # Обработчик callback-запросов

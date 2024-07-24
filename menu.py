@@ -1,73 +1,46 @@
 import os
 import json
-from telebot import types
-
-'''В классе CreateMenu реализованы следующие функции:
-
-    Загрузка данных из JSON файла
-    Установка и получение языка для меню
-    Выбор кнопок для заданного типа меню
-    Создание заголовка для заданного типа меню
-    Создание меню для Telegram бота с кнопками и заголовком, соответствующими выбранному языку.'''
+import telebot
+from languange import SelectLanguage
 
 class CreateMenu:
-
-    DEFAULT_LANGUAGE = "en"
-    LANGUAGES = ["ru", "en"]
-    
-    def __init__(self):
+    def __init__(self, bot):
+        self.bot = bot
         '''Конструктор класса. Определяет файл json'''
+        self.name_json_file = 'menu.json'
          # Получаем текущий путь к директории
         self.__db_path = os.getcwd()
         # Формируем путь к файлу json                                       
-        self.json_file = os.path.join(self.__db_path, 'elements.json')
+        self.json_file = os.path.join(self.__db_path, self.name_json_file)
         # Загружаем данные из json файла      
-        self.elements = self.__load_json()
-        # Устанавливаем язык по умолчанию !!!нужно сделать запоминание выбранного ранее языка   
-        self.selected_language = self.DEFAULT_LANGUAGE   
+        self.menu = self.__load_json()
 
-    def set_language(self, language_code):
-        '''Установка языка для меню'''
-        if language_code in self.LANGUAGES:
-            # Проверяем, является ли язык допустимым
-            self.selected_language = language_code                          
-        else:
-            # Выбрасываем ошибку, если языковой код недопустимый
-            # raise ValueError("Invalid language code")
-            # Устанавливаем язык по-умолчанию
-            self.selected_language = self.DEFAULT_LANGUAGE                       
-    
-    def get_language(self):
-        '''Получение текущего языка'''
-        return self.selected_language
+        self.sl = SelectLanguage()
 
     def __load_json(self):
         '''Функция загрузки JSON файла'''
         with open(self.json_file, 'r') as f:
             return json.load(f)
-    
-    def __select_button(self, type_menu: str) -> dict:
-        '''Выбор кнопок для заданного типа меню'''
-        buttons = self.elements['buttons']
-        result = {}
-        for button in buttons:
-            if button['type_menu'] == type_menu:
-                # Добавляем кнопку в словарь результатов с переведенным именем кнопки
-                result[button['btn_name'][self.selected_language]] = button['btn_callback']
-        return result
+        
+    def __get_menu_item(self, menu_id):
+        return self.menu[menu_id]
 
-    def create_caption(self, type_menu: str, optional=None) -> str:
-        '''Создание заголовка для заданного типа меню'''
-        captions = self.elements['captions']
-        for caption in captions:
-            if caption['type_menu'] == type_menu:
-                return caption['cpt_name'][self.selected_language].format(optional=optional)
-
-    def create_menu(self, type_menu: str) -> types.InlineKeyboardMarkup:
-        '''Создание меню для Telegram бота'''
-        markup = types.InlineKeyboardMarkup()
-        btn_list = self.__select_button(type_menu)
-        for btn_name, btn_callback in btn_list.items():
-            btn = types.InlineKeyboardButton(text=btn_name, callback_data=btn_callback)
-            markup.add(btn)
+    def __create_markup(self, menu_item):
+        markup = telebot.types.InlineKeyboardMarkup()
+        for button in menu_item['buttons']:
+            markup.add(telebot.types.InlineKeyboardButton(self.sl.get_language(button['label']), callback_data=button['callback_data']))
         return markup
+
+    def callback(self, call):
+        menu_id = call.data
+        menu_item = self.menu[menu_id]
+        if menu_item:
+            markup = self.__create_markup(menu_item)
+            self.bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=self.sl.get_language(menu_item['label']), reply_markup=markup)
+        else:
+            self.bot.answer_callback_query(call.id, text=self.sl.get_language('error_message_not_menu_item'))
+
+    def create_menu(self, message, type_menu='main'):
+        menu_item = self.__get_menu_item(type_menu)
+        markup = self.__create_markup(menu_item)
+        self.bot.send_message(message.from_user.id, self.sl.get_language(menu_item['label']), reply_markup=markup)

@@ -1,0 +1,41 @@
+{
+    "default_language": "ru",
+    
+    "languages": ["ru", "en"],
+
+    "ru":
+        {   "error_message_not_menu_item": "Ошибка!",
+            "label_main": "Главное меню",
+            "label_change_language": "Изменить язык",
+            "label_filter": "",
+            "label_help": "Помощь",
+            "button_change_language": "",
+            "button_filter": "",
+            "button_help": "",
+            "button_ru": "",
+            "button_en": "",
+            "button_back": "",
+            "button_city": "",
+            "button_type": "",
+            "button_about": "",
+            "button_instruction": ""
+        },
+    
+    "en": 
+        {
+            "error_message_not_menu_item": "Error!",
+            "label_main": "Main menu",
+            "label_change_language": "Change language",
+            "label_filter": "",
+            "label_help": "Help",
+            "button_filter": "",
+            "button_help": "",
+            "button_ru": "",
+            "button_en": "",
+            "button_back": "",
+            "button_city": "",
+            "button_type": "",
+            "button_about": "",
+            "button_instruction": ""
+        }
+}

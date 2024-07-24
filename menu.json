@@ -1,0 +1,34 @@
+{
+    "main": {
+        "label": "label_main",
+        "buttons": [
+            {"label": "button_change_language", "callback_data": "change_language"},
+            {"label": "button_filter", "callback_data": "filter"},
+            {"label": "button_help", "callback_data": "help"}
+        ]
+    },
+    "change_language": {
+        "label": "label_change_language",
+        "buttons": [
+            {"label": "button_ru", "callback_data": "ru"},
+            {"label": "button_en", "callback_data": "en"},
+            {"label": "button_back", "callback_data": "main"}
+        ]
+    },
+    "filter": {
+        "label": "label_filter",
+        "buttons": [
+            {"label": "button_city", "callback_data": "city"},
+            {"label": "button_type", "callback_data": "type"},
+            {"label": "button_back", "callback_data": "main"}
+        ]
+    },
+    "label_help": {
+        "label": "label_help",
+        "buttons": [
+            {"label": "button_about", "callback_data": "about"},
+            {"label": "button_instruction", "callback_data": "instruction"},
+            {"label": "button_back", "callback_data": "main"}
+        ]
+    }
+}

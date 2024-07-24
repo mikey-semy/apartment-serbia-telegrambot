@@ -1,7 +1,7 @@
 import os
 import json
 import telebot
-from languange import SelectLanguage
+from language import SelectLanguage
 
 class CreateMenu:
     def __init__(self, bot):

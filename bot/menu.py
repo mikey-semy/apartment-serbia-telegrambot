@@ -1,6 +1,7 @@
 import os
 import json
 import telebot
+from telebot.util import quick_markup
 
 class CreateMenu:
     def __init__(self, bot, lang):
@@ -28,11 +29,13 @@ class CreateMenu:
         return self.menu[menu_id]
 
     def __create_markup(self, menu_item):
-        markup = telebot.types.InlineKeyboardMarkup()
+        buttons = {}
+        row_width = 2
         for button in menu_item['buttons']:
-            markup.add(telebot.types.InlineKeyboardButton(text=self.lang.get_language(button['label']), callback_data=button['callback_data']))
+            buttons[self.lang.get_language(button['label'])] = {'callback_data': button['callback_data']}
+        markup = quick_markup(buttons, row_width=row_width)
         return markup
-
+    
     def callback(self, call, data=None):
         menu_id = call.data if data == None else data
         menu_item = self.menu[menu_id]

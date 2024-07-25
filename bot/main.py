@@ -8,6 +8,10 @@ bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
 
+url_nekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
+url_fourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
+url_cityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
+
 # Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
@@ -21,6 +25,26 @@ def callback(call):
                 handle_language_selection(call, "ru")               
             elif call.data == "action_en":
                 handle_language_selection(call, "en")
+            elif call.data == "beograd":
+                handle_city_selection(call, "beograd")
+            elif call.data == "novi_sad":
+                handle_city_selection(call, "novi_sad")
+            elif call.data == "nis":
+                handle_city_selection(call, "nis")
+            elif call.data == "apartaments":
+                handle_type_selection(call, "apartaments")
+            elif call.data == "houses":
+                handle_type_selection(call, "houses")
+            elif call.data == "from_area":
+                handle_area_selection(call, "from_area")
+            elif call.data == "to_area":
+                handle_area_selection(call, "to_area")
+            elif call.data == "from_price":
+                handle_type_selection(call, "from_price")
+            elif call.data == "to_price":
+                handle_type_selection(call, "to_price")
+            elif call.data == "action_search":
+                handle_search_selection()
             else:
                  print(f"Unknown action callback data: {call.data}")
     else:
@@ -38,6 +62,24 @@ def handle_language_selection(call, language):
     lang.set_language(language)
     menu.callback(call, "menu_change_language")
     #menu.callback(call, "menu_main")
+
+def handle_city_selection(call, city):
+    pass
+
+def handle_type_selection(call, type):
+    pass
+
+def handle_rooms_selection(call, rooms):
+    pass
+
+def handle_area_selection(call, area):
+    pass
+
+def handle_price_selection(call, price):
+    pass
+
+def handle_search_selection(call):
+    pass
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

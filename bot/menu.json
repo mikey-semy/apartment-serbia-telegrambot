@@ -4,6 +4,7 @@
         "buttons": [
             {"label": "button_change_language", "callback_data": "menu_change_language"},
             {"label": "button_filter", "callback_data": "menu_filter"},
+            {"label": "button_search", "callback_data": "menu_search"},
             {"label": "button_help", "callback_data": "menu_help"}
         ]
     },
@@ -18,9 +19,60 @@
     "menu_filter": {
         "label": "label_filter",
         "buttons": [
-            {"label": "button_city", "callback_data": "menu_city"},
-            {"label": "button_type", "callback_data": "menu_type"},
+            {"label": "button_change_city", "callback_data": "menu_change_city"},
+            {"label": "button_change_type", "callback_data": "menu_change_type"},
+            {"label": "button_change_rooms", "callback_data": "menu_change_rooms"},
+            {"label": "button_change_area", "callback_data": "menu_change_area"},
+            {"label": "button_change_price", "callback_data": "menu_change_price"},
             {"label": "button_back", "callback_data": "menu_main"}
+        ]
+    },
+    "menu_change_city": {
+        "label": "label_change_city",
+        "buttons": [
+            {"label": "button_beograd", "callback_data": "beograd"},
+            {"label": "button_novi_sad", "callback_data": "novi_sad"},
+            {"label": "button_nis", "callback_data": "nis"},
+            {"label": "button_back", "callback_data": "menu_filter"}
+        ]
+    },
+    "menu_change_type": {
+        "label": "label_change_type",
+        "buttons": [
+            {"label": "button_apartaments", "callback_data": "apartaments"},
+            {"label": "button_houses", "callback_data": "houses"},
+            {"label": "button_back", "callback_data": "menu_filter"}
+        ]
+    },
+    "menu_change_rooms": {
+        "label": "label_change_rooms",
+        "buttons": [
+            {"label": "button_rooms_0.5", "callback_data": "rooms_0.5"},
+            {"label": "button_rooms_1", "callback_data": "rooms_1"},
+            {"label": "button_rooms_1.5", "callback_data": "rooms_1.5"},
+            {"label": "button_rooms_2", "callback_data": "rooms_2"},
+            {"label": "button_rooms_2.5", "callback_data": "rooms_2.5"},
+            {"label": "button_rooms_3", "callback_data": "rooms_3"},
+            {"label": "button_rooms_3.5", "callback_data": "rooms_3.5"},
+            {"label": "button_rooms_4", "callback_data": "rooms_4"},
+            {"label": "button_rooms_4.5", "callback_data": "rooms_4.5"},
+            {"label": "button_back", "callback_data": "menu_filter"}
+        ]
+    },
+    "menu_change_area": {
+        "label": "label_change_area",
+        "buttons": [
+            {"label": "button_from_area", "callback_data": "from_area"},
+            {"label": "button_to_area", "callback_data": "to_area"},
+            {"label": "button_back", "callback_data": "menu_filter"}
+        ]
+    },
+    "menu_change_price": {
+        "label": "label_change_price",
+        "buttons": [
+            {"label": "button_from_price", "callback_data": "from_price"},
+            {"label": "button_to_price", "callback_data": "to_price"},
+            {"label": "button_back", "callback_data": "menu_filter"}
         ]
     },
     "menu_help": {

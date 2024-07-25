@@ -1,46 +1,131 @@
-{   "nekretnine":
+{   
+    "nekretnine":
     {
-        "apartaments":  "https://www.nekretnine.rs/apartmani/lista/po-stranici/10/",
-        "houses":       "https://www.nekretnine.rs/stambeni-objekti/lista/po-stranici/10/"
-
+        "base": "https://www.nekretnine.rs",
+        "path_style": "True",
+        "city":
+            {
+                "base": "grad",
+                "beograd": "beograd",
+                "novi_sad": "novi-sad",
+                "nis": "nis"
+            },
+        "type":
+            {
+                "apartaments":  "apartmani",
+                "houses":       "stambeni-objekti"
+            },
+        "rooms":
+            {
+                "_comment": "no rooms"
+            },
+        "area": 
+            {
+                "base": "kvadratura",
+                "from_to": "{from}_{to}"
+            },
+        "price": 
+            {
+                "base": "cena",
+                "from_to": "{from}_{to}"
+            },
+        "pages": 
+            {
+                "base": "lista/po-stranici",
+                "min": "10",
+                "max": "20"
+            }
     },
     "fourzida":
     {
-        "apartaments":  "https://www.4zida.rs/prodaja-stanova",
-        "houses":       "https://www.4zida.rs/prodaja-kuca"
+        "base": "https://www.4zida.rs",
+        "city":
+            {
+                "_comment": "path_style - the second",
+                "beograd": "beograd",
+                "novi_sad": "novi-sad",
+                "nis": "nis"
+            },
+        "type":
+            {
+                "_comment": "path_style - the first",
+                "apartaments":  "prodaja-stanova",
+                "houses":       "prodaja-kuca"
+            },
+        "rooms":
+            {
+                "_comment": "path_style for 1",
+                "base": "struktura=",
+                "0.5": "garsonjera",
+                "1": "jednosoban",
+                "1.5": "jednoiposoban",
+                "2": "dvosoban",
+                "2.5": "dvoiposoban",
+                "3": "trosoban",
+                "3.5": "troiposoban",
+                "4": "cetvorosoban",
+                "4.5": "cetvoroiposoban-i-vise"
+            },
+        "area": 
+            {
+                "from": "vece_od={from}m2",
+                "to": "manje_od={to}m2" 
+            },
+        "price": 
+            {
+                "from":"skuplje_od={from}eur",
+                "_comment": "path_style for to",
+                "to": "do-{to}-evra" 
+            }
     },
     "cityexpert":
     {
-        "apartaments": {
-            "beograd": "https://cityexpert.rs/prodaja-nekretnina/beograd",
-            "novi_sad": "https://cityexpert.rs/prodaja-nekretnina/novi-sad",
-            "nis": "https://cityexpert.rs/prodaja-nekretnina/nis"
-        }
+        "base": "https://cityexpert.rs",
+        "city":
+            {
+                "_comment": "path_style",
+                "beograd": "prodaja-nekretnina/beograd",
+                "novi_sad": "prodaja-nekretnina/novi-sad",
+                "nis": "prodaja-nekretnina/nis"
+            },
+        "type":
+            {   
+                "_comment": "1,2",
+                "base": "ptId=",
+                "apartaments":  "1",
+                "houses":       "2"
+            },
+        "rooms":
+            {
+                "_comment": "0.5,1.0",
+                "base":"structure=",
+                "0.5": "0.5",
+                "1.0": "1.0",
+                "1.5": "1.5",
+                "2.0": "2.0",
+                "2.5": "2.5",
+                "3.0": "3.0",
+                "3.5": "3.5",
+                "4.0": "4.0",
+                "4.5": "4.5"
+            },
+        "area": 
+            {
+                "from": "minSize={from}",
+                "to": "maxSize={to}"
+            },
+        "price": 
+            {
+                "from": "minPrice={from}",
+                "to": "maxPrice={to}"
+            }
     }
 
 }
-//     "types": [
 
-//         {
-//             "name": {
-//                 "ru": " ",
-//                 "rs": "Stambeni objekti",
-//                 "en": " "
-//             },
+// https://www.nekretnine.rs/apartmani/izdavanje-prodaja/prodaja
+// /grad/arandjelovac_bajina-basta_banja-vrujci_banostor_batocina_backa-topola_bela-palanka_belanovica_beograd_beocin_berkovac_beska_brzece_bukovac-juzno-backi_deliblato_divci-kolubarski_divcibare_doljevac_dolovo_donje-vlase_drazevac-grad-beograd_futog-juzno-backi_golubac_gornja-tresnjica_gostinica_gruza_indjija_irig_jagodina_kajtasovo_knic_konarevo_kopaonik_kovin_kragujevac_kraljevo_krusedol-selo_krusevac-kosovski_krcedin_kursumlija_ledinci-juzno-backi_mandjelos_merosina_mionica-varosica_nestin_nis_niska-banja_nova-varos_novi-sad_palic-severno-backi_pancevo_paracin_pacir_petrovaradin-juzno-backi_pozega-zlatiborski_prijepolje_rakovac-juzno-backi_raska-raski_rudnik-moravicki_sremska-kamenica_sremski-karlovci_stara-pazova_stari-slankamen_surdulica_susek_tara-planina_valjevo_velika-plana-podunavski_velika-remeta_veliko-gradiste_vinci_vrdnik_vrnjacka-banja_vrcin_zaklopaca_zlatibor_zrenjanin_cuprija_cerevic_cortanovci_curug_sumarak_zica
 
-//             "name": {
-//                 "ru": " ",
-//                 "rs": "Apartmani",
-//                 "en": " "
-//             },
-
-//             "name": {
-//                 "ru": " ",
-//                 "rs": "Zemljišta",
-//                 "en": " "
-//             },
-//         }
-//     ],
 //     "cities": [
 //         {
 //             "name": {
@@ -194,55 +279,5 @@
 //             },
 //             "callback": "pozarevac"
 //         }
-//     ]
-
-    
+//     ] 
 // }
-
-// {
-//     "propertyType": {
-//       "sr": ["Stanovi", "Kuće", "Poslovni prostor"],
-//       "en": ["Apartments", "Houses", "Commercial property"],
-//       "ru": ["Квартиры", "Дома", "Коммерческая недвижимость"]
-//     },
-//     "transactionType": {
-//       "sr": ["Prodaja", "Izdavanje"],
-//       "en": ["Sale", "Rent"],
-//       "ru": ["Продажа", "Аренда"]
-//     },
-//     "location": {
-//       "sr": ["Grad", "Opština"],
-//       "en": ["City", "District"],
-//       "ru": ["Город", "Район"]
-//     },
-//     "price": {
-//       "sr": ["Minimalna cena", "Maksimalna cena"],
-//       "en": ["Minimum price", "Maximum price"],
-//       "ru": ["Минимальная цена", "Максимальная цена"]
-//     },
-//     "area": {
-//       "sr": ["Minimalna površina", "Maksimalna površina"],
-//       "en": ["Minimum area", "Maximum area"],
-//       "ru": ["Минимальная площадь", "Максимальная площадь"]
-//     },
-//     "rooms": {
-//       "sr": ["Garsonjera", "Jednosoban", "Jednoiposoban", "Dvosoban", "Dvoiposoban", "Trosoban", "Troiposoban", "4+ soba"],
-//       "en": ["Studio", "1 room", "1.5 rooms", "2 rooms", "2.5 rooms", "3 rooms", "3.5 rooms", "4+ rooms"],
-//       "ru": ["Студия", "1 комната", "1.5 комнаты", "2 комнаты", "2.5 комнаты", "3 комнаты", "3.5 комнаты", "4+ комнаты"]
-//     },
-//     "floor": {
-//       "sr": ["Minimalni sprat", "Maksimalni sprat"],
-//       "en": ["Minimum floor", "Maximum floor"],
-//       "ru": ["Минимальный этаж", "Максимальный этаж"]
-//     },
-//     "additionalFeatures": {
-//       "sr": ["Terasa", "Parking", "Lift", "Nameštaj", "Novogradnja", "Renovirano"],
-//       "en": ["Balcony/terrace", "Parking", "Elevator", "Furniture", "New building", "Renovated"],
-//       "ru": ["Балкон/терраса", "Парковка", "Лифт", "Мебель", "Новостройка", "Ремонт"]
-//     },
-//     "energyEfficiency": {
-//       "sr": ["Energetska efikasnost"],
-//       "en": ["Energy efficiency"],
-//       "ru": ["Энергоэффективность"]
-//     }
-//   }

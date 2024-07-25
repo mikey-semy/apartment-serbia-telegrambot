@@ -2,7 +2,7 @@ import os
 import telebot
 from menu import CreateMenu
 from language import SelectLanguage
-#from filter import UrlBuilder
+from filter import UrlBuilder
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()

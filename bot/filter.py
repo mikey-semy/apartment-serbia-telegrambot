@@ -17,7 +17,15 @@ class UrlBuilder:
         else:
             # Для query_style удаляем параметр, начинающийся с value=
             self.params = [p for p in self.params if not p.startswith(f"{value}=")]
-
+    
+    def create_array(self, elem, sep):
+        array = []
+        if elem in array:
+            array.remove(elem)
+        else: 
+            array.append(elem)
+        return sep.join(array)
+    
     # Метод для построения итогового URL
     def build_url(self):
         if self.path_style:

@@ -75,7 +75,7 @@ def handle_area_selection(call, area):
 def handle_price_selection(call, price):
     pass
 
-def handle_search_selection(call):
+def handle_search_selection(call, message):
     #urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
     #urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
     #urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
@@ -86,6 +86,8 @@ def handle_search_selection(call):
     urls = [urlNekretnine]#, urlFourzida, urlCityexpert]
     scraper = CommonScraper()
     offers = scraper.get_data(urls)
+
+    bot.send_message(message.from_user.id, text=str(offers))
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

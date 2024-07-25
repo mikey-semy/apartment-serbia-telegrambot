@@ -3,14 +3,11 @@ import telebot
 from menu import CreateMenu
 from language import SelectLanguage
 from filter import UrlBuilder
+from scraper import CommonScraper
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
-
-url_nekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
-url_fourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
-url_cityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
 
 # Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: True)
@@ -22,7 +19,7 @@ def callback(call):
     elif "action" in call.data:
             
             if call.data == "action_ru":
-                handle_language_selection(call, "ru")               
+                handle_language_selection(call, "ru")             
             elif call.data == "action_en":
                 handle_language_selection(call, "en")
             elif call.data == "beograd":
@@ -44,7 +41,7 @@ def callback(call):
             elif call.data == "to_price":
                 handle_type_selection(call, "to_price")
             elif call.data == "action_search":
-                handle_search_selection()
+                handle_search_selection(call)
             else:
                  print(f"Unknown action callback data: {call.data}")
     else:
@@ -79,7 +76,16 @@ def handle_price_selection(call, price):
     pass
 
 def handle_search_selection(call):
-    pass
+    #urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
+    #urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
+    #urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
+
+    urlNekretnine = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
+    #urlFourzida = 'https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?struktura=jednosoban&struktura=jednoiposoban&struktura=dvosoban&struktura=dvoiposoban&struktura=trosoban&vece_od=10m2&manje_od=60m2&skuplje_od=1000eur'
+    #urlCityexpert = 'https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1'
+    urls = [urlNekretnine]#, urlFourzida, urlCityexpert]
+    scraper = CommonScraper()
+    offers = scraper.get_data(urls)
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

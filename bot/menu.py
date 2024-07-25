@@ -30,7 +30,7 @@ class CreateMenu:
 
     def __create_markup(self, menu_item):
         buttons = {}
-        row_width = 2
+        row_width = 4
         for button in menu_item['buttons']:
             buttons[self.lang.get_language(button['label'])] = {'callback_data': button['callback_data']}
         markup = quick_markup(buttons, row_width=row_width)

@@ -4,7 +4,6 @@
         "buttons": [
             {"label": "button_change_language", "callback_data": "menu_change_language"},
             {"label": "button_filter", "callback_data": "menu_filter"},
-            {"label": "button_search", "callback_data": "action_search"},
             {"label": "button_help", "callback_data": "menu_help"}
         ]
     },
@@ -24,6 +23,7 @@
             {"label": "button_change_rooms", "callback_data": "menu_change_rooms"},
             {"label": "button_change_area", "callback_data": "menu_change_area"},
             {"label": "button_change_price", "callback_data": "menu_change_price"},
+            {"label": "button_search", "callback_data": "action_search"},
             {"label": "button_back", "callback_data": "menu_main"}
         ]
     },

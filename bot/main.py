@@ -86,8 +86,8 @@ def handle_search_selection(call):
     urls = [urlNekretnine]#, urlFourzida, urlCityexpert]
     scraper = CommonScraper()
     offers = scraper.get_data(urls)
-
-    bot.send_message(call.message.from_user.id, text=str(offers))
+    for offer in offers:
+        bot.send_message(call.message.chat.id, text=str(offer))
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

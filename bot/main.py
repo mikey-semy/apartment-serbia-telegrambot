@@ -19,7 +19,7 @@ def callback(call):
     elif "action" in call.data:
             
             if call.data == "action_ru":
-                handle_language_selection(call, "ru")             
+                handle_language_selection(call, "ru")           
             elif call.data == "action_en":
                 handle_language_selection(call, "en")
             elif call.data == "beograd":
@@ -75,7 +75,7 @@ def handle_area_selection(call, area):
 def handle_price_selection(call, price):
     pass
 
-def handle_search_selection(call, message):
+def handle_search_selection(call):
     #urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
     #urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
     #urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
@@ -87,7 +87,7 @@ def handle_search_selection(call, message):
     scraper = CommonScraper()
     offers = scraper.get_data(urls)
 
-    bot.send_message(message.from_user.id, text=str(offers))
+    bot.send_message(call.message.from_user.id, text=str(offers))
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

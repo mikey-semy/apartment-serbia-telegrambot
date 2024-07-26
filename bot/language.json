@@ -1,5 +1,5 @@
 {
-    "default_language": "en",
+    "default_language": "ru",
     "languages": ["ru", "en"],
     "check": "✅",
     "uncheck": "⬜",
@@ -7,6 +7,7 @@
         "message_offer": "**🏠 {title}**\n [Подробнее]({url})\n Цена: {price}\n Место: {location}\n",
         "message_search_wait": "Пожалуйста, подождите...",
         "message_found_count": "Найдено предложений: {count}",
+        "message_not_found": "Ничего не найдено :(",
         "label_search_finish": "Продолжить поиск или вернуться назад?",
         "label_search_break": "Отменить поиск?",
         "label_main": "Главное меню 🏠",

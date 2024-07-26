@@ -10,6 +10,11 @@ lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
 scraper = CommonScraper()
 
+class CallWrapper:
+    def __init__(self, message):
+        self.message = message
+        self.data = None
+
 #urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
 #urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
 #urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
@@ -30,32 +35,28 @@ def callback(call):
 
     elif "action" in call.data:
             
-            if call.data == "action_ru":
-                handle_language_selection(call, "ru")           
-            elif call.data == "action_en":
-                handle_language_selection(call, "en")
-            elif call.data == "beograd":
-                handle_city_selection(call, "beograd")
-            elif call.data == "novi_sad":
-                handle_city_selection(call, "novi_sad")
-            elif call.data == "nis":
-                handle_city_selection(call, "nis")
-            elif call.data == "apartaments":
-                handle_type_selection(call, "apartaments")
-            elif call.data == "houses":
-                handle_type_selection(call, "houses")
-            elif call.data == "from_area":
-                handle_area_selection(call, "from_area")
-            elif call.data == "to_area":
-                handle_area_selection(call, "to_area")
-            elif call.data == "from_price":
-                handle_type_selection(call, "from_price")
-            elif call.data == "to_price":
-                handle_type_selection(call, "to_price")
-            elif call.data == "action_search":
-                handle_search_selection(call)
-            else:
-                 print(f"Unknown action callback data: {call.data}")
+        action_handlers = {
+                #language
+                "action_ru": lambda call: handle_language_selection(call, "ru"),
+                "action_en": lambda call: handle_language_selection(call, "en"),
+                #cities
+                "action_beograd": lambda call: handle_city_selection(call, "beograd"),
+                "action_novi_sad": lambda call: handle_city_selection(call, "novi_sad"),
+                "action_nis": lambda call: handle_city_selection(call, "nis"),
+                #types
+                "action_apartaments": lambda call: handle_type_selection(call, "apartaments"),
+                "action_houses": lambda call: handle_type_selection(call, "houses"),
+                #area
+                "action_from_area": lambda call: handle_area_selection(call, "from_area"),
+                "action_to_area": lambda call: handle_area_selection(call, "to_area"),
+                #price
+                "action_from_price": lambda call: handle_type_selection(call, "from_price"),
+                "action_to_price": lambda call: handle_type_selection(call, "to_price"),
+                #others
+                "action_search": handle_search_selection,
+        }
+        handler = action_handlers.get(call.data, lambda call: print(f"Unknown action callback data: {call.data}"))
+        handler(call)
     else:
         print(f"Unknown menu callback data: {call.data}")
 
@@ -65,6 +66,10 @@ def start(message):
     lang.set_language(message.from_user.language_code)
     # Создание главного меню
     menu.create_menu(message)
+
+@bot.message_handler(commands=['search'])
+def search(message):
+    handle_search_selection(CallWrapper(message))
 
 # Функция для обработки языкового выбора
 def handle_language_selection(call, language):
@@ -88,15 +93,15 @@ def handle_price_selection(call, price):
     pass
 
 def handle_search_selection(call):
-    bot.send_message(call.message.chat.id, 
+
+    bot.send_message(call.message.chat.id,
                      text=lang.get_language('message_search_wait'))
     menu.callback(call, "menu_search_break")
 
     offers = scraper.get_data(urls)
 
-    print("Got offers: ", len(offers))
     if len(offers):
-        bot.send_message(call.message.chat.id, 
+        bot.send_message(call.message.chat.id,
                          text=lang.get_language('message_found_count').format(count=len(offers)))
 
         for offer in offers:
@@ -112,6 +117,9 @@ def handle_search_selection(call):
                 parse_mode='Markdown')
         else:
             menu.callback(call, "menu_search_finish")
+    else:
+        bot.send_message(call.message.chat.id, 
+                         text=lang.get_language('message_not_found'))
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)

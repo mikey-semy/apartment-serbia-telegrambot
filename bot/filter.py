@@ -1,3 +1,5 @@
+
+
 class UrlBuilder:
     # Инициализация класса с базовым URL и стилем пути
     def __init__(self, base_site, path_style=False):
@@ -87,35 +89,3 @@ class UrlBuilder:
 # # Формируем итоговую ссылку
 # final_url = url_builder.build_url()
 # print(final_url)
-
-
-# function j(e) {
-#                 var t = document.querySelector(".filtergroup.offer.filter .filter-list.collap.fixed.search-list-advanced-filters");
-#                 t.innerHTML = "";
-#                 var r, n, a = e.filter((function(e) {
-#                     return e.counts > 0
-#                 }
-#                 )), o = document.createDocumentFragment();
-#                 a.forEach((function(e) {
-#                     o.appendChild(function(e) {
-#                         var t = document.createElement("li")
-#                           , r = document.createElement("a");
-#                         r.className = "checkbox filter-checkbox";
-#                         var n = e.addressBody.split(", ")[0].toLowerCase().replace(/\s+/g, "-");
-#                         return r.setAttribute("data-url", "/grad/" + n + "/lista/po-stranici/10/"),
-#                         r.setAttribute("data-name", "grad"),
-#                         r.setAttribute("data-key", e.id),
-#                         r.textContent = e.addressBody.split(", ")[0],
-#                         t.appendChild(r),
-#                         t
-#                     }(e))
-#                 }
-#                 )),
-#                 t.appendChild(o),
-#                 (n = null === (r = Array.from(document.querySelectorAll(".filtergroup .heading")).find((function(e) {
-#                     return "Grad" === e.textContent.trim()
-#                 }
-#                 ))) || void 0 === r ? void 0 : r.parentNode) ? (n.addEventListener("click", C),
-#                 verticalFilterAnimations.registerEvents(!1)) : console.error("Grad container not found"),
-#                 document.dispatchEvent(new CustomEvent("cityOrCityPartListUpdated"))
-#             }

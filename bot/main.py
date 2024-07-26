@@ -4,26 +4,31 @@ from menu import CreateMenu
 from language import SelectLanguage
 from filter import UrlBuilder
 from scraper import CommonScraper
+from jsonloader import JsonLoader
+
+JSON_FILE_NAME = 'filter.json'
 
 bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
 scraper = CommonScraper()
+json_loader = JsonLoader(JSON_FILE_NAME)
+filter = json_loader.load_json()
 
 class CallWrapper:
     def __init__(self, message):
         self.message = message
         self.data = None
 
-#urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
-#urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
-#urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
+urlNekretnine = UrlBuilder("https://www.nekretnine.rs", path_style=True)
+urlFourzida = UrlBuilder("https://www.4zida.rs", path_style=True)
+urlCityexpert = UrlBuilder("https://cityexpert.rs", path_style=True)
 
 #Для проверки:
-urlNekretnine = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
+#urlNekretnine = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
 #urlFourzida = 'https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?struktura=jednosoban&struktura=jednoiposoban&struktura=dvosoban&struktura=dvoiposoban&struktura=trosoban&vece_od=10m2&manje_od=60m2&skuplje_od=1000eur'
 #urlCityexpert = 'https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1'
-urls = [urlNekretnine]#, urlFourzida, urlCityexpert]
+urls = [urlNekretnine, urlFourzida, urlCityexpert]
 
     
 # Обработчик callback-запросов
@@ -36,22 +41,22 @@ def callback(call):
     elif "action" in call.data:
             
         action_handlers = {
-                #language
-                "action_ru": lambda call: handle_language_selection(call, "ru"),
-                "action_en": lambda call: handle_language_selection(call, "en"),
+                #types
+                "action_apartaments": lambda call: handle_type_selection(call, "apartaments"),
+                "action_houses": lambda call: handle_type_selection(call, "houses"),
                 #cities
                 "action_beograd": lambda call: handle_city_selection(call, "beograd"),
                 "action_novi_sad": lambda call: handle_city_selection(call, "novi_sad"),
                 "action_nis": lambda call: handle_city_selection(call, "nis"),
-                #types
-                "action_apartaments": lambda call: handle_type_selection(call, "apartaments"),
-                "action_houses": lambda call: handle_type_selection(call, "houses"),
                 #area
-                "action_from_area": lambda call: handle_area_selection(call, "from_area"),
-                "action_to_area": lambda call: handle_area_selection(call, "to_area"),
+                "action_area_min": lambda call: handle_area_selection(call, "area_min"),
+                "action_area_max": lambda call: handle_area_selection(call, "area_max"),
                 #price
-                "action_from_price": lambda call: handle_type_selection(call, "from_price"),
-                "action_to_price": lambda call: handle_type_selection(call, "to_price"),
+                "action_price_min": lambda call: handle_type_selection(call, "price_min"),
+                "action_price_max": lambda call: handle_type_selection(call, "price_max"),
+                #language
+                "action_ru": lambda call: handle_language_selection(call, "ru"),
+                "action_en": lambda call: handle_language_selection(call, "en"),
                 #others
                 "action_search": handle_search_selection,
         }
@@ -78,19 +83,45 @@ def handle_language_selection(call, language):
     #menu.callback(call, "menu_main")
 
 def handle_city_selection(call, city):
-    pass
-
+    selected_city = city
+    
 def handle_type_selection(call, type):
-    pass
+    selected_type = type
 
 def handle_rooms_selection(call, rooms):
-    pass
+    selected_rooms = rooms
 
 def handle_area_selection(call, area):
-    pass
+    if area == "area_min":
+        bot.send_message(call.message.chat.id, 
+                         lang.get_language("label_change_area_min"))
+        bot.register_next_step_handler(call.message, handle_area_min_input)
+    if area == "area_max":
+        bot.send_message(call.message.chat.id, 
+                         lang.get_language("label_change_area_max"))
+        bot.register_next_step_handler(call.message, handle_area_max_input)
+
+def handle_area_min_input(message):
+    area_min = message.text
+
+def handle_area_max_input(message):
+    area_max = message.text
 
 def handle_price_selection(call, price):
-    pass
+    if price == "price_min":
+        bot.send_message(call.message.chat.id, 
+                         lang.get_language("label_change_price_min"))
+        bot.register_next_step_handler(call.message, handle_area_min_input)
+    if price == "price_max":
+        bot.send_message(call.message.chat.id, 
+                         lang.get_language("label_change_price_max"))
+        bot.register_next_step_handler(call.message, handle_area_max_input)
+
+def handle_price_min_input(message):
+    price_min = message.text
+    
+def handle_price_max_input(message):
+    price_max = message.text
 
 def handle_search_selection(call):
 
@@ -118,22 +149,8 @@ def handle_search_selection(call):
         else:
             menu.callback(call, "menu_search_finish")
     else:
-        bot.send_message(call.message.chat.id, 
+        bot.send_message(call.message.chat.id,
                          text=lang.get_language('message_not_found'))
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)
-
-
-
-# @bot.message_handler(content_types=['text'])
-# def check_subscriptions(message):
-#     subscribed_channels = ["@MikeDaily"]
-#     for channel_id in subscribed_channels:
-#         chat_member = bot.get_chat_member(channel_id, message.from_user.id)
-#         if chat_member.status in ['member', 'creator', 'administrator']:
-#             subscribed_channels.append(channel_id)
-#     if subscribed_channels:
-#         bot.send_message(message.chat.id, f'You are subscribed to the following channels: {", ".join(subscribed_channels)}')
-#     else:
-#         bot.send_message(message.chat.id, 'You are not subscribed to any of the channels.')

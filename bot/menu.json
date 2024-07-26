@@ -15,6 +15,21 @@
             {"label": "button_back", "callback_data": "menu_main"}
         ]
     },
+    "menu_search_finish": {
+        "label": "label_search_finish",
+        "buttons": [
+            {"label": "button_filter", "callback_data": "menu_filter"},
+            {"label": "button_search_continue", "callback_data": "action_search_continue"},
+            {"label": "button_back", "callback_data": "menu_main"}
+        ]
+    },
+    "menu_search_break": {
+        "label": "label_search_break",
+        "buttons": [
+            {"label": "button_filter", "callback_data": "menu_filter"},
+            {"label": "button_back", "callback_data": "menu_main"}
+        ]
+    },
     "menu_filter": {
         "label": "label_filter",
         "buttons": [

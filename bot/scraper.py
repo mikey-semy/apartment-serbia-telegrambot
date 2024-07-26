@@ -111,7 +111,7 @@ class NekretnineScraper(WebScraper):
             # area = offer_element.find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
             url_offer = offer_element.find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
             #url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
-            
+
             offer_cleaned = {
                 'title': re.sub(PATTERN, '', str(title.text)),
                 'location': re.sub(PATTERN, '', str(location.text)),
@@ -127,7 +127,7 @@ class NekretnineScraper(WebScraper):
             print(f"Size offer_element { count }: { sys.getsizeof(offer_element) / 1000 } Kbytes")
             count = count + 1
             offers.append(offer_cleaned)
-
+            print("Send data for watch you")
         return offers
 
 class FourzidaScraper(WebScraper):
@@ -211,7 +211,7 @@ class CityexpertScraper(WebScraper):
         offers = []
         
         offer_elements = soup.findAll(self.data["OFFER_TAG"], class_=self.data["OFFER_CLASS"])
-
+        
         for offer_element in offer_elements:
 
             self.scrape_pause()

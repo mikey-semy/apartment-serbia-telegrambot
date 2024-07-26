@@ -93,6 +93,8 @@ def handle_search_selection(call):
     menu.callback(call, "menu_search_break")
 
     offers = scraper.get_data(urls)
+
+    print("Got offers: ", len(offers))
     if len(offers):
         bot.send_message(call.message.chat.id, 
                          text=lang.get_language('message_found_count').format(len(offers)))

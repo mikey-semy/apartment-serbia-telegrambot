@@ -97,7 +97,7 @@ def handle_search_selection(call):
     print("Got offers: ", len(offers))
     if len(offers):
         bot.send_message(call.message.chat.id, 
-                         text=lang.get_language('message_found_count').format(len(offers)))
+                         text=lang.get_language('message_found_count').format(count=len(offers)))
 
         for offer in offers:
             if call.data in ["menu_filter", "menu_main"]:
@@ -105,10 +105,10 @@ def handle_search_selection(call):
             bot.send_message(
                 call.message.chat.id,
                 text=lang.get_language('message_offer')
-                    .format(offer['title'], 
-                            offer['url_offer'], 
-                            offer['price'], 
-                            offer['location']), 
+                    .format(title=offer['title'], 
+                            url=offer['url_offer'], 
+                            price=offer['price'], 
+                            location=offer['location']), 
                 parse_mode='Markdown')
         else:
             menu.callback(call, "menu_search_finish")

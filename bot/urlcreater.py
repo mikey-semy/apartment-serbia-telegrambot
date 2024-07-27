@@ -8,7 +8,7 @@ class UrlCreater:
     def __init__(self):
         json_loader = JsonLoader(JSON_FILE_NAME)
         self.filter = json_loader.load_json()
-
+        
     def get_type(self, call, value):
         
         self.value = value
@@ -88,3 +88,5 @@ for obj in objects:
 
 for values in list_values:
     print(values)
+
+for 

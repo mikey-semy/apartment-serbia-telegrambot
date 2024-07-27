@@ -1,8 +1,14 @@
+from jsonloader import JsonLoader
 
+JSON_FILE_NAME = 'template.json'
 
 class UrlBuilder:
     # Инициализация класса с базовым URL и стилем пути
     def __init__(self, base_site, path_style=False):
+
+        json_loader = JsonLoader(JSON_FILE_NAME)
+        self.filter = json_loader.load_json()
+        
         self.base_site = base_site  # Базовый URL
         self.path_style = path_style  # Флаг для определения стиля URL (path или query)
         self.params = []  # Список для хранения параметров

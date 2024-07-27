@@ -1,0 +1,46 @@
+{
+    "nekretnine":
+    {
+        "base": "https://www.nekretnine.rs",
+        "type": 
+        {
+            "style": "Path",
+            "param": "None",
+            "value": "None",
+            "default_value": "apartmani",
+            "values": ["apartmani", "stambeni-objekti"]
+        },
+        "city": 
+        {
+            "style": "Path",
+            "param": "grad",
+            "value": "None",
+            "default_value": "beograd",
+            "values": ["beograd", "novi-sad", "nis"]
+        },
+        "area": 
+        {
+            "style": "Path",
+            "param": "kvadratura",
+            "value": "{area_min}_{area_max}",
+            "default_value": "1_500",
+            "values": "None"
+        },
+        "price": 
+        {
+            "style": "Path",
+            "param": "cena",
+            "value": "{price_min}_{price_max}",
+            "default_value": "1_1000000",
+            "values": "None"
+        },
+        "pages": 
+        {
+            "style": "Path",
+            "param": "lista/po-stranici",
+            "value": "10",
+            "default_value": "10",
+            "values": ["10", "20"]
+        }
+    }
+}

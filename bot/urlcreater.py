@@ -3,7 +3,7 @@ from jsonloader import JsonLoader
 class UrlCreater:
     JSON_FILE_NAME = 'bot/template.json'
     def __init__(self):
-        self.json_loader = JsonLoader(JSON_FILE_NAME)
+        self.json_loader = JsonLoader(self.JSON_FILE_NAME)
         self.template = self.json_loader.load_json()
 
 class NekretnineUrlCreater(UrlCreater):

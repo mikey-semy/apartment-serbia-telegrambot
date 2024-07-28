@@ -1,46 +1,34 @@
 {
-    "nekretnine":
-    {
+    "nekretnine": {
         "base": "https://www.nekretnine.rs",
-        "type": 
-        {
-            "style": "Path",
-            "param": "None",
-            "value": "None",
-            "default_value": "apartmani",
-            "values": ["apartmani", "stambeni-objekti"]
-        },
-        "city": 
-        {
-            "style": "Path",
-            "param": "grad",
-            "value": "None",
-            "default_value": "beograd",
-            "values": ["beograd", "novi-sad", "nis"]
-        },
-        "area": 
-        {
-            "style": "Path",
-            "param": "kvadratura",
-            "value": "{area_min}_{area_max}",
-            "default_value": "1_500",
-            "values": "None"
-        },
-        "price": 
-        {
-            "style": "Path",
-            "param": "cena",
-            "value": "{price_min}_{price_max}",
-            "default_value": "1_1000000",
-            "values": "None"
-        },
-        "pages": 
-        {
-            "style": "Path",
-            "param": "lista/po-stranici",
-            "value": "10",
-            "default_value": "10",
-            "values": ["10", "20"]
-        }
+        "type": "/{type}",
+        "city": "/grad/{city}",
+        "area_min": "/kvadratura/{area_min}",
+        "area_max": "_{area_max}",
+        "price_min": "/cena/{price_min}",
+        "price_max": "_{price_max}",
+        "all": "{base}{type}{city}{area_min}{area_max}{price_min}{price_max}"
+    },
+    "fourzida": {
+        "base": "https://www.4zida.rs",
+        "type": "/{type}",
+        "city": "/{city}",
+        "price_max": "/do-{to}-evra",
+        "rooms": "&struktura={rooms}",
+        "area_min": "&vece_od={area_min}m2",
+        "area_max": "&manje_od={area_max}m2",
+        "price_min": "&skuplje_od={from}eur",
+        "all": "{base}{type}{city}{price_max}?{rooms}{area_min}{area_max}{price_min}"
+    },
+    "cityexpert": {
+        "base": "https://cityexpert.rs",
+        "city": "/prodaja-nekretnina/{city}",
+        "type": "&ptId={type}",
+        "rooms": "&structure={rooms}",
+        "area_min": "&minSize={area_min}",
+        "area_max": "&maxSize={area_max}",
+        "price_min": "&minPrice={price_min}",
+        "price_max": "&maxPrice={price_max}",
+        "all": "{base}{city}?{type}{rooms}{area_min}{area_max}{price_min}{price_max}"
     }
 }

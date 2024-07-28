@@ -1,92 +1,99 @@
-from collections import OrderedDict
-
 from jsonloader import JsonLoader
 
-JSON_FILE_NAME = 'filter.json'
-
 class UrlCreater:
+    JSON_FILE_NAME = 'bot/template.json'
     def __init__(self):
-        json_loader = JsonLoader(JSON_FILE_NAME)
-        self.filter = json_loader.load_json()
-        
-    def get_type(self, call, value):
-        
-        self.value = value
+        self.json_loader = JsonLoader(JSON_FILE_NAME)
+        self.template = self.json_loader.load_json()
 
+class NekretnineUrlCreater(UrlCreater):
+    NAME_TEMPLATE = 'nekretnine'
     
-    def __get_menu_item(self, menu_id):
-        return self.menu[menu_id]
-    
-class UrlNekretnine(UrlCreater):
-
-    def __init__(self, url) -> None:
+    def __init__(self):
         super().__init__()
-        self.name = "nekretnine"
-        self.url = url
-        self.filter = self.filter[self.name]
+        self.params = {}
 
-    def create_url(type_housing, city, area, price):
-        path_url = filter['base'] + "/".join()
+    def set_param(self, key, value):
+        #Здесь нужно обработать значения в зависимости от ключа
+        #area и price проверить на число и между min и max в другом месте
+        #city - объединить при больших вариантах для nekretnine
+        #rooms - объединить для 4zida и cityexpert, для nekretnine ничего не делать
+        #добавить в шаблон наименования для каждого сайта
+        final_value = self.__get_template(key).format(key=value)
+        self.params[key] = final_value
+
+    def __get_template(self, param):
+        return self.template[self.NAME_TEMPLATE][param] if param else ""
     
+    def create_url(self):
+        data = self.params
+        return self.template[self.NAME_TEMPLATE]["all"].format(**data)
 
 
-odNekretnine = OrderedDict([
-            ('path_base', 'https://www.nekretnine.rs'),
-            ('path_type', 'stambeni-objekti'),
-            ('path_base_city', 'grad'),
-            ('path_city', 'beograd'),
-            ('path_base_area', 'kvadratura'),
-            ('path_area', '1_500'),
-            ('path_base_price', 'cena'),
-            ('path_price', '1_1000000'),
-        ])
-odFourzida = OrderedDict([
-            ('path_base', 'https://www.4zida.rs'),
-            ('path_type', 'prodaja-stanova'),
-            ('path_city', 'beograd'),
-            ('path_rooms', 'garsonjera'),
-            ('path_price_max', 'do-1000000-evra'),
-            ('param_base_room', 'struktura'),
-            ('param_room', 'jednosoban'),
-            ('param_base_area_min', 'vece_od'),
-            ('param_area_min', '1m2'),
-            ('param_base_area_max', 'manje_od'),
-            ('param_area_max', '500m2'),
-            ('param_base_price_min', '1eur'),
-        ])
-odCityexpert = OrderedDict([
-            ('path_base', 'https://cityexpert.rs'),
-            ('path_base_type', 'prodaja-nekretnina'),
-            ('path_city', 'beograd'),
-            ('param_base_type', 'ptId'),
-            ('param_type', '1'),
-            ('param_base_room', 'structure'),
-            ('param_type', '0.1'),
-            ('param_base_area_min', 'minSize'),
-            ('param_area_min', '1'),
-            ('param_base_area_max', 'maxSize'),
-            ('param_area_max', '500'),
-            ('param_base_price_min', 'minPrice'),
-            ('param_area_min', '1'),
-            ('param_base_price_max', 'maxPrice'),
-            ('param_area_max', '1000000'),
-        ])
+class FourzidaUrlCreater(UrlCreater):
+    NAME_TEMPLATE = 'fourzida'
 
-objects = [odNekretnine, odFourzida, odCityexpert]
+    def __init__(self):
+        super().__init__()
+        self.params = {}
 
-def func_update_value(city):
-    for obj in objects:
-        obj.update_value(city)
+    def set_param(self, key, value):
+        #Здесь нужно обработать значения в зависимости от ключа
+        #area и price проверить на число и между min и max в другом месте
+        #city - объединить при больших вариантах для nekretnine
+        #rooms - объединить для 4zida и cityexpert, для nekretnine ничего не делать
+        #добавить в шаблон наименования для каждого сайта
+        final_value = self.__get_template(key).format(key=value)
+        self.params[key] = final_value
 
-#update_value('beograd')
-func_update_value('nis')
+    def __get_template(self, param):
+        return self.template[self.NAME_TEMPLATE][param] if param else ""
+    
+    def create_url(self):
+        data = self.params
+        return self.template[self.NAME_TEMPLATE]["all"].format(**data)
 
-list_values = []
-for obj in objects:
-    values = list(obj.values())
-    list_values.append(values)
 
-for values in list_values:
-    print(values)
+class CityexpertUrlCreater(UrlCreater):
+    NAME_TEMPLATE = 'cityexpert'
+   
+    def __init__(self):
+        super().__init__()
+        self.params = {}
+        
+    def set_param(self, key, value):
+        #Здесь нужно обработать значения в зависимости от ключа
+        #area и price проверить на число и между min и max в другом месте
+        #city - объединить при больших вариантах для nekretnine
+        #rooms - объединить для 4zida и cityexpert, для nekretnine ничего не делать
+        #добавить в шаблон наименования для каждого сайта
+        final_value = self.__get_template(key).format(key=value)
+        self.params[key] = final_value
 
-for 
+    def __get_template(self, param):
+        return self.template[self.NAME_TEMPLATE][param] if param else ""
+    
+    def create_url(self):
+        data = self.params
+        return self.template[self.NAME_TEMPLATE]["all"].format(**data)
+    
+class CommonUrlCreater(UrlCreater):
+    #Для проверки:
+    #urlNekretnine = 'https://www.nekretnine.rs/stambeni-objekti/stanovi/izdavanje-prodaja/prodaja/grad/beograd/lista/po-stranici/10/'
+    #urlFourzida = 'https://www.4zida.rs/prodaja-stanova/beograd/garsonjera/vlasnik/do-100000-evra?struktura=jednosoban&struktura=jednoiposoban&struktura=dvosoban&struktura=dvoiposoban&struktura=trosoban&vece_od=10m2&manje_od=60m2&skuplje_od=1000eur'
+    #urlCityexpert = 'https://cityexpert.rs/prodaja-nekretnina/beograd?ptId=2,1&minPrice=10000&maxPrice=300000&minSize=10&maxSize=60&bedroomsArray=r1'
+
+    def __init__(self):
+        super().__init__()
+    
+    def set_param(self, key, value):
+        NekretnineUrlCreater().set_param(key, value)
+        FourzidaUrlCreater().set_param(key, value)
+        CityexpertUrlCreater().set_param(key, value)
+
+    def get_urls(self) -> list:
+        return [
+            NekretnineUrlCreater().create_url(),
+            FourzidaUrlCreater().create_url(),
+            CityexpertUrlCreater().create_url()
+        ]

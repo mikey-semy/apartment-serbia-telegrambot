@@ -1,4 +1,4 @@
-from database.JSONLoader import JSONLoader
+from JSONLoader import JSONLoader
 
 class UrlCreater:
     JSON_FILE_NAME = 'database/urls.json'
@@ -97,3 +97,12 @@ class CommonUrlCreater(UrlCreater):
             FourzidaUrlCreater().create_url(),
             CityexpertUrlCreater().create_url()
         ]
+    
+
+urlc = CommonUrlCreater()
+urlc.set_param('city', 'Beograd')
+urlc.set_param('price_min', '20')
+urlc.set_param('area_min', '100')
+urlc.set_param('area_max', '500')
+result = urlc.get_urls()
+print(result)

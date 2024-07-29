@@ -1,4 +1,4 @@
-from database.JSONLoader import JSONLoader
+from modules.JSONLoader import JSONLoader
 
 class SelectLanguage:
 

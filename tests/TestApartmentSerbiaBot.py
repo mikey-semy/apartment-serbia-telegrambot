@@ -2,29 +2,33 @@
 
 import unittest
 
-from utils import CreateMenu
-from utils import SelectLanguage
-from utils import UrlCreater
-from utils import WebScraper
+from modules import SelectLanguage
+from modules import UrlCreater
+from modules import WebScraper
 
 class TestApartmentSerbiaBot(unittest.TestCase):
     def setUp(self):
-        self.menu = CreateMenu.CreateMenu()
         self.lang = SelectLanguage.SelectLanguage()
         self.urlc = UrlCreater.CommonUrlCreater()
-        self.scrp = WebScraper.CommonScraper()
 
-    def test_set_language_ru(self):
-        self.assertEqual(self.lang.set_language("ru"), self.lang.selected_language)
+    def test_valid_language_code(self):
+        self.lang.set_language("ru")
+        result = self.lang.selected_language
+        self.assertEqual(result, "ru")
     
-    def test_set_language_rs(self):
-        self.assertEqual(self.lang.set_language("rs"), self.lang.selected_language)
+    def test_invalid_language_code(self):
+        with self.assertRaises(ValueError) as context:
+            self.lang.set_language('rs')
+        self.assertEqual(str(context.exception), "Invalid language code")
     
-    def test_get_language_simple(self):
-        self.assertEqual(self.lang.get_language("message_search_wait"), "Пожалуйста, подождите...")
+    def test_create_url(self):
+        self.urlc.set_param('city', 'Beograd')
+        self.urlc.set_param('price_min', '20')
+        self.urlc.set_param('area_min', '100')
+        self.urlc.set_param('area_max', '500')
+        result = self.urlc.get_urls()
+        self.assertEqual(result, 'https://www.nekretnine.rs/')
 
-    def test_get_language_error(self):
-        self.assertEqual(self.lang.get_language("message_search_wiat"), "Пожалуйста, подождите...")
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 import telebot
 from telebot.util import quick_markup
-from database.JSONLoader import JSONLoader
+from modules.JSONLoader import JSONLoader
 
 class CreateMenu:
     JSON_FILE_NAME = 'database/menu.json'

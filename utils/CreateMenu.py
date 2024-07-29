@@ -1,6 +1,6 @@
 import telebot
 from telebot.util import quick_markup
-from database.JsonLoader import JsonLoader
+from database.JSONLoader import JSONLoader
 
 class CreateMenu:
     JSON_FILE_NAME = 'database/menu.json'
@@ -10,7 +10,7 @@ class CreateMenu:
         self.bot = bot
         self.lang = lang
 
-        json_loader = JsonLoader(self.JSON_FILE_NAME)
+        json_loader = JSONLoader(self.JSON_FILE_NAME)
         self.menu = json_loader.load_json()
       
     def __get_menu_item(self, menu_id):

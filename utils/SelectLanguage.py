@@ -1,4 +1,4 @@
-from database.JsonLoader import JsonLoader
+from database.JSONLoader import JSONLoader
 
 class SelectLanguage:
 
@@ -6,7 +6,7 @@ class SelectLanguage:
 
     def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
-        json_loader = JsonLoader(self.JSON_FILE_NAME)
+        json_loader = JSONLoader(self.JSON_FILE_NAME)
         self.lang = json_loader.load_json()
         
         self.selected_language = self.lang["default_language"]

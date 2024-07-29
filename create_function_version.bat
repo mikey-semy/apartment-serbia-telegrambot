@@ -4,7 +4,7 @@ for /f "tokens=1,2 delims==" %%G in (.env) do (
     set %%G=%%H
 )
 
-powershell -command "Compress-Archive -Path *.py, *.md, *.txt, bot/*.py, bot/*.json  -DestinationPath code.zip -Force"
+powershell -command "Compress-Archive -Path *.py, *.md, *.txt, utils, database  -DestinationPath code.zip -Force"
 
 yc serverless function version create ^
     --function-id="%FUNCTION_ID%" ^

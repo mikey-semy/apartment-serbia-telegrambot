@@ -1,9 +1,9 @@
-from database.JsonLoader import JsonLoader
+from database.JSONLoader import JSONLoader
 
 class UrlCreater:
-    JSON_FILE_NAME = 'database/template.json'
+    JSON_FILE_NAME = 'database/urls.json'
     def __init__(self):
-        self.json_loader = JsonLoader(self.JSON_FILE_NAME)
+        self.json_loader = JSONLoader(self.JSON_FILE_NAME)
         self.template = self.json_loader.load_json()
 
 class NekretnineUrlCreater(UrlCreater):

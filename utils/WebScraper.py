@@ -7,7 +7,7 @@ import requests
 import bs4 # для yandex cloud - иначе ругается на отсутствие bs4
 #from bs4 import BeautifulSoup
 import urllib3
-from database.JsonLoader import JsonLoader
+from database.JSONLoader import JSONLoader
 
 # Отключаем предупреждение о небезопасном запросе
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -26,7 +26,7 @@ class WebScraper:
 
     def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
-        json_loader = JsonLoader(self.JSON_FILE_NAME)
+        json_loader = JSONLoader(self.JSON_FILE_NAME)
         self.scraper_data = json_loader.load_json()
 
     def get_page(self, url) -> object:

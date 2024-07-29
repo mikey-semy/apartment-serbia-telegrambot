@@ -2,17 +2,15 @@ import telebot
 from telebot.util import quick_markup
 from jsonloader import JsonLoader
 
-JSON_FILE_NAME = 'menu.json'
-
-
-ROW_WIDTH = 4
-
 class CreateMenu:
+    JSON_FILE_NAME = 'menu.json'
+    ROW_WIDTH = 4
+
     def __init__(self, bot, lang):
         self.bot = bot
         self.lang = lang
 
-        json_loader = JsonLoader(JSON_FILE_NAME)
+        json_loader = JsonLoader(self.JSON_FILE_NAME)
         self.menu = json_loader.load_json()
       
     def __get_menu_item(self, menu_id):
@@ -35,7 +33,7 @@ class CreateMenu:
                 'web_app':                              button['web_app']
                 }
             
-        markup = quick_markup(buttons, row_width=ROW_WIDTH)
+        markup = quick_markup(buttons, row_width=self.ROW_WIDTH)
 
         return markup
     

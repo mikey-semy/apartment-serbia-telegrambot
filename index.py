@@ -1,5 +1,5 @@
 import telebot
-from main import bot # Да, временно без папки, когда на самом деле в папке.
+from main import bot
 
 def handler(event, _):
     message = telebot.types.Update.de_json(event['body'])

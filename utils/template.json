@@ -13,11 +13,11 @@
         "base": "https://www.4zida.rs",
         "type": "/{type}",
         "city": "/{city}",
-        "price_max": "/do-{to}-evra",
+        "price_max": "/do-{price_max}-evra",
         "rooms": "&struktura={rooms}",
         "area_min": "&vece_od={area_min}m2",
         "area_max": "&manje_od={area_max}m2",
-        "price_min": "&skuplje_od={from}eur",
+        "price_min": "&skuplje_od={price_min}eur",
         "all": "{base}{type}{city}{price_max}?{rooms}{area_min}{area_max}{price_min}"
     },
     "cityexpert": {

@@ -1,16 +1,17 @@
 from jsonloader import JsonLoader
 
-JSON_FILE_NAME = 'lang.json'
-
 class SelectLanguage:
+
+    JSON_FILE_NAME = 'lang.json'
+
     def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
-        json_loader = JsonLoader(JSON_FILE_NAME)
+        json_loader = JsonLoader(self.JSON_FILE_NAME)
         self.lang = json_loader.load_json()
         
         self.selected_language = self.lang["default_language"]
         
-    def set_language(self, language_code):
+    def set_language(self, language_code) -> None:
         if language_code in self.lang["languages"]:
             # Проверяем, является ли язык допустимым
             self.selected_language = language_code                          
@@ -20,7 +21,7 @@ class SelectLanguage:
             # Устанавливаем язык по-умолчанию
             # self.selected_language = self.lang["default_language"]                     
     
-    def get_language(self, text):
+    def get_language(self, text) -> (None | str):
         try:
             return self.lang[self.selected_language][text]
         except KeyError:

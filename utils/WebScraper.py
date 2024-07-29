@@ -7,7 +7,7 @@ import requests
 import bs4 # для yandex cloud - иначе ругается на отсутствие bs4
 #from bs4 import BeautifulSoup
 import urllib3
-from database.jsonloader import JsonLoader
+from database.JsonLoader import JsonLoader
 
 # Отключаем предупреждение о небезопасном запросе
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

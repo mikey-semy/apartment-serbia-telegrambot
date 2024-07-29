@@ -1,4 +1,4 @@
-from database.jsonloader import JsonLoader
+from database.JsonLoader import JsonLoader
 
 class UrlCreater:
     JSON_FILE_NAME = 'database/template.json'

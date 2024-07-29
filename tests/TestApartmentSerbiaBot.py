@@ -2,17 +2,17 @@
 
 import unittest
 
-from utils import menu
-from utils import language
-from utils import urlcreater
-from utils import scraper
+from utils import CreateMenu
+from utils import SelectLanguage
+from utils import UrlCreater
+from utils import WebScraper
 
 class TestApartmentSerbiaBot(unittest.TestCase):
     def setUp(self):
-        self.menu = menu.CreateMenu()
-        self.lang = language.SelectLanguage()
-        self.urlc = urlcreater.CommonUrlCreater()
-        self.scrp = scraper.CommonScraper()
+        self.menu = CreateMenu.CreateMenu()
+        self.lang = SelectLanguage.SelectLanguage()
+        self.urlc = UrlCreater.CommonUrlCreater()
+        self.scrp = WebScraper.CommonScraper()
 
     def test_set_language_ru(self):
         self.assertEqual(self.lang.set_language("ru"), self.lang.selected_language)

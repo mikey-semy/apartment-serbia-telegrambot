@@ -1,9 +1,9 @@
 import os
 import telebot
-from utils.menu import CreateMenu
-from utils.language import SelectLanguage
-from utils.urlcreater import CommonUrlCreater
-from utils.scraper import CommonScraper
+from utils.CreateMenu import CreateMenu
+from utils.SelectLanguage import SelectLanguage
+from utils.UrlCreater import CommonUrlCreater
+from utils.WebScraper import CommonScraper
 
 
 

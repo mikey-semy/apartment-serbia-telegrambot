@@ -13,7 +13,7 @@ from modules.JSONLoader import JSONLoader
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class WebScraper:
-    '''Скраппер - потом распишу...'''
+    '''Скрапер'''
 
     JSON_FILE_NAME = 'database/scraper.json'
     HEADERS = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36' }
@@ -43,19 +43,6 @@ class WebScraper:
         delay = random.uniform(min_pause, max_pause)
         time.sleep(delay)
 
-
-class NekretnineScraper(WebScraper):
-    '''Скраппер для сайта nekretnine.rs'''
-
-    def __init__(self, url, page_number=1) -> None:
-        super().__init__()
-        self.name = "nekretnine"
-        self.url = url
-        self.data = self.scraper_data[self.name]
-        # Конструируем URL для следующей страницы
-        if page_number > 1:
-            self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
-
     def scrape(self) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
         soup = self.get_page(self.url)
@@ -65,6 +52,18 @@ class NekretnineScraper(WebScraper):
         '''Функция проверяет, есть ли следующая страница'''
         next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
         return next_page_link is not None
+    
+class NekretnineScraper(WebScraper):
+    '''Скрапер для сайта nekretnine.rs'''
+
+    def __init__(self, url, page_number=1) -> None:
+        super().__init__()
+        self.name = "nekretnine"
+        self.url = url
+        self.data = self.scraper_data[self.name]
+        # Конструируем URL для следующей страницы
+        if page_number > 1:
+            self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
     
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
@@ -107,7 +106,7 @@ class NekretnineScraper(WebScraper):
         return offers
 
 class FourzidaScraper(WebScraper):
-    '''Скраппер для сайта 4zida.rs'''
+    '''Скрапер для сайта 4zida.rs'''
 
     def __init__(self, url, page_number=1):
         super().__init__()
@@ -116,16 +115,6 @@ class FourzidaScraper(WebScraper):
         self.data = self.scraper_data[self.name]
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
-    
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
-
-    def has_next_page(self, soup) -> bool:
-        '''Функция проверяет, есть ли следующая страница'''
-        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
-        return next_page_link is not None
     
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
@@ -167,7 +156,7 @@ class FourzidaScraper(WebScraper):
         return offers
 
 class CityexpertScraper(WebScraper):
-    '''Скраппер для сайта cityexpert.rs'''
+    '''Скрапер для сайта cityexpert.rs'''
 
     def __init__(self, url, page_number=1):
 
@@ -178,16 +167,6 @@ class CityexpertScraper(WebScraper):
 
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
-    
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
-
-    def has_next_page(self, soup) -> bool:
-        '''Функция проверяет, есть ли следующая страница'''
-        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
-        return next_page_link is not None
     
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
@@ -228,8 +207,8 @@ class CityexpertScraper(WebScraper):
         return offers
 
 
-class CommonScraper(WebScraper):
-    ''' Класс общего скреппера для трех сайтов с методом получения данных постранично'''
+class CommonScraper(NekretnineScraper, FourzidaScraper, CityexpertScraper):
+    ''' Класс общего скрапера для трех сайтов с методом получения данных постранично'''
    
     def __init__(self):
         super().__init__()

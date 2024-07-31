@@ -4,8 +4,8 @@ for /f "tokens=1,2 delims==" %%G in (.env) do (
     set %%G=%%H
 )
 
-powershell -command "Compress-Archive -Path *.py, *.md, *.txt, utils, database  -DestinationPath code.zip -Force"
-
+powershell -command "Compress-Archive -Path *.py, *.md, *.txt, modules, database -DestinationPath code.zip -Force"
+::ЧАТЖПТ ОБМАНЩИК powershell -command "Get-ChildItem -Path *.py,*.md,*.txt -File; Get-ChildItem -Path modules -Recurse -Include *.py; Get-ChildItem -Path database -Recurse -Include *.json | Compress-Archive -DestinationPath code.zip -Force"
 yc serverless function version create ^
     --function-id="%FUNCTION_ID%" ^
     --runtime python312 ^

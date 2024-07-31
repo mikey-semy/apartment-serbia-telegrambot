@@ -47,8 +47,8 @@
     "cityexpert": {
         "default": {
             "base": "https://cityexpert.rs",
-            "type": "/prodaja-nekretnina/beograd",
-            "city": "",
+            "type": "/prodaja-nekretnina",
+            "city": "/beograd",
             "price_max": "",
             "rooms": "",
             "area_min": "",

@@ -58,7 +58,8 @@ class NekretnineUrlCreater(UrlCreater):
             else:  # area
                 value = 1 if key.endswith("_min") else 500
         
-        # Если min > max, то меняем их местами ибо нех...
+        # Если min > max, то меняем их местами ибо нех, изменив наименование. 
+        # Шаблон мешает, поэтому применяем регулярные выражения (в extract_number())
         if key.endswith("_min"):
             max_key = key.replace("_min", "_max")
             if self.params[max_key] and self.extract_number(self.params[max_key]) < value:
@@ -68,7 +69,7 @@ class NekretnineUrlCreater(UrlCreater):
             if self.params[min_key] and self.extract_number(self.params[min_key]) > value:
                 self.params[min_key], value = value, self.extract_number(self.params[min_key])
 
-        # Шаблоним появившихся в этой функции:
+        # Так как мы создали новое значение в обход шаблона, не забываем отшаблонить (нужно переписать):
         if key != "price_min" and str(self.params["price_min"]).isdigit():
             self.params["price_min"] = self.__get_template("price_min", self.params["price_min"])
         if key != "price_max" and str(self.params["price_max"]).isdigit():
@@ -86,16 +87,18 @@ class NekretnineUrlCreater(UrlCreater):
     def set_param(self, key, value):
         if key in ["area_min", "area_max", "price_min", "price_max"]:
 
-            final_value = self.__get_template(key, self.check_numbers(key, value))
+            number = self.check_numbers(key, value)
 
-            # нужно подумать как ошаблонить второе число
-        else:
-            if value in ["apartaments", "houses", "beograd", "novi_sad", "nis"]:
+            final_value = self.__get_template(key, number)
+
+        elif key in ["type", "city"]:
+                
                 value = self.__get_template(value)
-            final_value = self.__get_template(key, value)
+
+                final_value = self.__get_template(key, value)
         
         self.params.update({key: final_value})
-        print(self.params)
+
 
     def __get_template(self, param, value=None):
         template = self.template[self.NAME_TEMPLATE][param]

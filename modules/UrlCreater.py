@@ -1,4 +1,4 @@
-from JSONLoader import JSONLoader
+from modules.JSONLoader import JSONLoader
 import re
 #НУЖНО ЧТО-ТО С ЭТИМ ДЕЛАТЬ - МНОГО ПОВТОРЯЮЩЕГО КОДА, ЧИТАЕМ ПРО КЛАССЫ (НАСЛЕДОВАНИЯ)
 class UrlCreater:
@@ -53,7 +53,7 @@ class NekretnineUrlCreater(UrlCreater):
             self.params["area_max"] = 500
         if key == "area_max" and not self.params["area_min"]:
             self.params["area_min"] = 1
-        print(self.params)
+
         # Если число было не числом или вообще было меньше нуля, выставляем значения по умолчанию:
         if value is None or value < 0:
             if key.startswith("price"):
@@ -110,7 +110,6 @@ class NekretnineUrlCreater(UrlCreater):
 
 class FourzidaUrlCreater(UrlCreater):
     NAME_TEMPLATE = 'fourzida'
-
     params = {
             "base": "https://www.4zida.rs",
             "type": "/prodaja-stanova",
@@ -124,7 +123,6 @@ class FourzidaUrlCreater(UrlCreater):
     
     def __init__(self):
         super().__init__()
-        self.params = {}
 
     def get_default_params(self):
         return self.template[self.NAME_TEMPLATE]["default"]
@@ -145,7 +143,7 @@ class FourzidaUrlCreater(UrlCreater):
             self.params["area_max"] = 500
         if key == "area_max" and not self.params["area_min"]:
             self.params["area_min"] = 1
-        print(self.params)
+
         # Если число было не числом или вообще было меньше нуля, выставляем значения по умолчанию:
         if value is None or value < 0:
             if key.startswith("price"):
@@ -191,7 +189,7 @@ class FourzidaUrlCreater(UrlCreater):
         
         self.params.update({key: final_value})
 
-    def __get_template(self, param, value):
+    def __get_template(self, param, value=None):
         template = self.template[self.NAME_TEMPLATE][param]
         return template.format(p={param: value}) if value else template
     
@@ -201,7 +199,6 @@ class FourzidaUrlCreater(UrlCreater):
 
 class CityexpertUrlCreater(UrlCreater):
     NAME_TEMPLATE = 'cityexpert'
-
     params = {
             "base": "https://cityexpert.rs",
             "type": "/prodaja-nekretnina",
@@ -215,7 +212,6 @@ class CityexpertUrlCreater(UrlCreater):
    
     def __init__(self):
         super().__init__()
-        self.params = {}
     
     def get_default_params(self):
         return self.template[self.NAME_TEMPLATE]["default"]
@@ -236,7 +232,7 @@ class CityexpertUrlCreater(UrlCreater):
             self.params["area_max"] = 500
         if key == "area_max" and not self.params["area_min"]:
             self.params["area_min"] = 1
-        print(self.params)
+
         # Если число было не числом или вообще было меньше нуля, выставляем значения по умолчанию:
         if value is None or value < 0:
             if key.startswith("price"):
@@ -282,7 +278,7 @@ class CityexpertUrlCreater(UrlCreater):
         
         self.params.update({key: final_value})
 
-    def __get_template(self, param, value):
+    def __get_template(self, param, value=None):
         template = self.template[self.NAME_TEMPLATE][param]
         return template.format(p={param: value}) if value else template
     
@@ -310,13 +306,13 @@ class CommonUrlCreater(UrlCreater):
             CityexpertUrlCreater().create_url()
         ]
     
-
-urlc = CommonUrlCreater()
-urlc.set_param('city', 'beograd')
-urlc.set_param('price_min', 'gh')
-urlc.set_param('price_max', '2g')
-urlc.set_param('area_max', '-500')
-urlc.set_param('area_min', '-100')
-urlc.set_param('area_max', '500')
-result = urlc.get_urls()
-print(result)
+# for check class:
+# urlc = CommonUrlCreater()
+# urlc.set_param('city', 'beograd')
+# urlc.set_param('price_min', 'gh')
+# urlc.set_param('price_max', '2g')
+# urlc.set_param('area_max', '-500')
+# urlc.set_param('area_min', '-100')
+# urlc.set_param('area_max', '500')
+# result = urlc.get_urls()
+# print(result)

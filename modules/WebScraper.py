@@ -42,16 +42,6 @@ class WebScraper:
         '''Функция вводит задержку, чтобы предотвратить блокировку скрейпера'''
         delay = random.uniform(min_pause, max_pause)
         time.sleep(delay)
-
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
-
-    def has_next_page(self, soup) -> bool:
-        '''Функция проверяет, есть ли следующая страница'''
-        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
-        return next_page_link is not None
     
 class NekretnineScraper(WebScraper):
     '''Скрапер для сайта nekretnine.rs'''
@@ -64,6 +54,16 @@ class NekretnineScraper(WebScraper):
         # Конструируем URL для следующей страницы
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
+    
+    def scrape(self) -> list:
+        '''Функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = self.get_page(self.url)
+        return self.scrape_page(soup)
+
+    def has_next_page(self, soup) -> bool:
+        '''Функция проверяет, есть ли следующая страница'''
+        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
+        return next_page_link is not None
     
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
@@ -79,7 +79,6 @@ class NekretnineScraper(WebScraper):
                 break
 
             self.scrape_pause()
-
 
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
@@ -115,6 +114,16 @@ class FourzidaScraper(WebScraper):
         self.data = self.scraper_data[self.name]
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
+    
+    def scrape(self) -> list:
+        '''Функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = self.get_page(self.url)
+        return self.scrape_page(soup)
+
+    def has_next_page(self, soup) -> bool:
+        '''Функция проверяет, есть ли следующая страница'''
+        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
+        return next_page_link is not None
     
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
@@ -168,6 +177,16 @@ class CityexpertScraper(WebScraper):
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
     
+    def scrape(self) -> list:
+        '''Функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = self.get_page(self.url)
+        return self.scrape_page(soup)
+
+    def has_next_page(self, soup) -> bool:
+        '''Функция проверяет, есть ли следующая страница'''
+        next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
+        return next_page_link is not None
+    
     def scrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
         offers = []
@@ -207,7 +226,7 @@ class CityexpertScraper(WebScraper):
         return offers
 
 
-class CommonScraper(NekretnineScraper, FourzidaScraper, CityexpertScraper):
+class CommonScraper(WebScraper):
     ''' Класс общего скрапера для трех сайтов с методом получения данных постранично'''
    
     def __init__(self):
@@ -253,3 +272,9 @@ class CommonScraper(NekretnineScraper, FourzidaScraper, CityexpertScraper):
                 current_page_number += 1
 
         return all_offers
+    
+# for check class:
+# scraper = CommonScraper()
+# url_ = ["https://www.nekretnine.rs/apartmani/grad/beograd/kvadratura/1_500/cena/0_1000000"]
+# offers = scraper.get_data(url_)
+# print(offers)

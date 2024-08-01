@@ -1,8 +1,28 @@
-ApartmentSerbiaBot - Бот для поиска квартир в Сербии. Создается для обучения.
+#ApartmentSerbiaBot
+Бот для поиска квартир в Сербии. **Создается для обучения.**
 
-Для разработки:
-https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/step_example.py
+##Описание
+ApartmentSerbiaBot - это Telegram-бот, предназначенный для поиска квартир в Сербии. 
+Бот позволяет пользователям искать квартиры по различным параметрам, таким как город, тип жилья, количество комнат, площадь и цена.
+Поиск производится с трех сайтов: [Nekretnine](https://www.nekretnine.rs), [Fourzida](https://www.4zida.rs), [Cityexpert](https://www.cityexpert.rs)
 
-https://emojipedia.org/
+##Функционал
+Бот имеет следующие функции:
+* Поиск квартир по городам Сербии
+* Фильтрация результатов производится по типу жилья, количеству комнат, площади и цене.
+* Вывод информации о каждой квартире, включая адрес, цена и ссылка.
 
-https://github.com/mskozlova/ydb_serverless_telegram_bot/tree/main
+##Ограничения (временные)
+Бот имеет следующие ограничения:
+* Поиск по трем городам: Белград, Нови-Сад, Ниш)
+* Три объявления с каждого сайта
+
+
+##Команды (пока что...)
+Бот поддерживает следующие команды:
+* /start - запуск бота и вывод меню
+
+##Для разработки:
+[pyTelegramBotAPI Examples](https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples)
+[Emoji](https://emojipedia.org/)
+[YC Serverless](https://github.com/mskozlova/ydb_serverless_telegram_bot/tree/main)

@@ -4,10 +4,10 @@ import time
 import random
 import re
 import requests
-import bs4 # для yandex cloud - иначе ругается на отсутствие bs4
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import urllib3
-from modules.JSONLoader import JSONLoader
+from app.modules.JSONLoader import JSONLoader
+from app.config import Config
 
 # Отключаем предупреждение о небезопасном запросе
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -15,30 +15,25 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class WebScraper:
     '''Скрапер'''
 
-    JSON_FILE_NAME = 'database/scraper.json'
-    HEADERS = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36' }
-    TIMEOUT = None
-    PATTERN = r"^\s+|\n|\r|\s+$"
-    MIN_PAUSE = 0.5
-    MAX_PAUSE = 1
-    QUANTITY_PAGE = 1
-    QUANTITY_OFFERS = 3
-
     def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
-        json_loader = JSONLoader(self.JSON_FILE_NAME)
+        json_loader = JSONLoader(Config.WebScraper.JSON_FILE_NAME)
         self.scraper_data = json_loader.load_json()
 
     def get_page(self, url) -> object:
         '''Функция отправляет GET-запрос к URL и возвращает объект BeautifulSoup'''
-        response = requests.get(url, headers=self.HEADERS, timeout=self.TIMEOUT)
-        return bs4.BeautifulSoup(response.text, 'html.parser') # для yandex cloud - иначе ругается на отсутствие bs4
+        response = requests.get(url, 
+                                headers=Config.WebScraper.HEADERS, 
+                                timeout=Config.WebScraper.TIMEOUT)
+        return BeautifulSoup(response.text, 'html.parser')
 
     def scrape_page(self, soup) -> list:
         '''Абстрактный метод, который должен быть реализован в подклассах'''
         raise NotImplementedError("Subclasses must implement this method")
     
-    def scrape_pause(self, min_pause=MIN_PAUSE, max_pause=MAX_PAUSE) -> None:
+    def scrape_pause(self, 
+                     min_pause=Config.WebScraper.MIN_PAUSE, 
+                     max_pause=Config.WebScraper.MAX_PAUSE) -> None:
         '''Функция вводит задержку, чтобы предотвратить блокировку скрейпера'''
         delay = random.uniform(min_pause, max_pause)
         time.sleep(delay)
@@ -75,7 +70,7 @@ class NekretnineScraper(WebScraper):
         count = 0
         for offer_element in offer_elements:
 
-            if count == self.QUANTITY_OFFERS:
+            if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
             self.scrape_pause()
@@ -89,8 +84,8 @@ class NekretnineScraper(WebScraper):
             #url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
 
             offer_cleaned = {
-                'title': re.sub(self.PATTERN, '', str(title.text)),
-                'location': re.sub(self.PATTERN, '', str(location.text)),
+                'title': re.sub(Config.WebScraper.PATTERN, '', str(title.text)),
+                'location': re.sub(Config.WebScraper.PATTERN, '', str(location.text)),
                 # 'rooms': re.sub(PATTERN, '', str(rooms.text)).split(' | ')[2],
                 'price': price.find('span').text.strip(),
                 # 'area': area.find('span').text.strip(),
@@ -136,7 +131,7 @@ class FourzidaScraper(WebScraper):
 
         for offer_element in offer_elements:
 
-            if count == self.QUANTITY_OFFERS:
+            if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
             self.scrape_pause()
@@ -150,8 +145,8 @@ class FourzidaScraper(WebScraper):
             # url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
             
             offer_cleaned = {
-                'title': re.sub(self.PATTERN, '', str(title.text)),
-                'location': re.sub(self.PATTERN, '', str(location.text)),
+                'title': re.sub(Config.WebScraper.PATTERN, '', str(title.text)),
+                'location': re.sub(Config.WebScraper.PATTERN, '', str(location.text)),
                 # 'rooms': re.sub(PATTERN, '', str(rooms.text)).split(' • ')[1],
                 'price': price.text.strip(),
                 # 'area': re.sub(PATTERN, '', str(area.text)).split(' • ')[0],
@@ -197,7 +192,7 @@ class CityexpertScraper(WebScraper):
 
         for offer_element in offer_elements:
 
-            if count == self.QUANTITY_OFFERS:
+            if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
             self.scrape_pause()
@@ -211,8 +206,8 @@ class CityexpertScraper(WebScraper):
             # url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
            
             offer_cleaned = {
-                'title': re.sub(self.PATTERN, '', str(title.text)),
-                'location': re.sub(self.PATTERN, '', str(location.text)),
+                'title': re.sub(Config.WebScraper.PATTERN, '', str(title.text)),
+                'location': re.sub(Config.WebScraper.PATTERN, '', str(location.text)),
                 # 'rooms': re.sub(PATTERN, '', str(rooms[1].text if rooms is not None else '')),
                 'price': price.find('span').text.strip(),
                 # 'area': re.sub(PATTERN, '', str(area[0].text if area is not None else '')),
@@ -247,7 +242,7 @@ class CommonScraper(WebScraper):
         else:
             raise ValueError("Unsupported URL")
 
-    def get_data(self, urls: list, current_page_number: int = 1, quantity_pages: int = WebScraper.QUANTITY_PAGE) -> list:
+    def get_data(self, urls: list, current_page_number: int = 1, quantity_pages: int = Config.WebScraper.QUANTITY_PAGE) -> list:
         '''Функция get_data собирает данные со всех страниц сайта'''
        
         last_page_number = quantity_pages

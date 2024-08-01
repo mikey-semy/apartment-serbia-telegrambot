@@ -2,9 +2,9 @@
 
 import unittest
 
-from modules import SelectLanguage
-from modules import UrlCreater
-from modules.WebScraper import CommonScraper
+from app.modules import SelectLanguage
+from app.modules import UrlCreater
+from app.modules.WebScraper import CommonScraper
 
 class TestApartmentSerbiaBot(unittest.TestCase):
     def setUp(self):

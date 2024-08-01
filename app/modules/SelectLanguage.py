@@ -1,12 +1,11 @@
-from modules.JSONLoader import JSONLoader
+from app.modules.JSONLoader import JSONLoader
+from app.config import Config
 
 class SelectLanguage:
 
-    JSON_FILE_NAME = 'database/lang.json'
-
     def __init__(self) -> None:
         '''Конструктор класса. Определяет файл json'''
-        json_loader = JSONLoader(self.JSON_FILE_NAME)
+        json_loader = JSONLoader(Config.SelectLanguage.JSON_FILE_NAME)
         self.lang = json_loader.load_json()
         
         self.selected_language = self.lang["default_language"]

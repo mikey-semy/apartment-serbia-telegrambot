@@ -1,10 +1,15 @@
-from modules.JSONLoader import JSONLoader
+"""Модуль для создание ссылок сайтов для дальнейшего скрайпинга
+!!! НУЖНО ЧТО-ТО С ЭТИМ ДЕЛАТЬ - МНОГО ПОВТОРЯЮЩЕГО КОДА, ЧИТАЕМ ПРО КЛАССЫ (НАСЛЕДОВАНИЯ)
+"""
+
+from app.modules.JSONLoader import JSONLoader
+from app.config import Config
 import re
-#НУЖНО ЧТО-ТО С ЭТИМ ДЕЛАТЬ - МНОГО ПОВТОРЯЮЩЕГО КОДА, ЧИТАЕМ ПРО КЛАССЫ (НАСЛЕДОВАНИЯ)
+
 class UrlCreater:
-    JSON_FILE_NAME = 'database/urls.json'
+
     def __init__(self):
-        self.json_loader = JSONLoader(self.JSON_FILE_NAME)
+        self.json_loader = JSONLoader(Config.UrlCreater.JSON_FILE_NAME)
         self.template = self.json_loader.load_json()
 
     def extract_number(self, value):

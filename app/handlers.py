@@ -1,24 +1,18 @@
-import os
-import telebot
-from modules.CreateMenu import CreateMenu
-from modules.SelectLanguage import SelectLanguage
-from modules.UrlCreater import CommonUrlCreater
-from modules.WebScraper import CommonScraper
 
+from app.__main__ import bot
 
+from app.modules.CreateMenu import CreateMenu
+from app.modules.SelectLanguage import SelectLanguage
+from app.modules.UrlCreater import CommonUrlCreater
+from app.modules.WebScraper import CommonScraper
+from app.modules.CallWrapper import CallWrapper
 
-bot = telebot.TeleBot(os.environ.get('BOT_TOKEN'))
 lang = SelectLanguage()
 menu = CreateMenu(bot, lang)
 scraper = CommonScraper()
+urlc = CommonUrlCreater()
 
 
-class CallWrapper:
-    def __init__(self, message):
-        self.message = message
-        self.data = None
-    
-# Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     if "menu" in call.data:
@@ -54,32 +48,28 @@ def callback(call):
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    # Установка языка по-умолчанию (из настроек пользователя)
     lang.set_language(message.from_user.language_code)
-    # Создание главного меню
     menu.create_menu(message)
 
 @bot.message_handler(commands=['search'])
 def search(message):
     handle_search_selection(CallWrapper(message))
 
-# Функция для обработки языкового выбора
 def handle_language_selection(call, language):
     lang.set_language(language)
-    menu.callback(call, "menu_change_language")
-    #menu.callback(call, "menu_main")
+    menu.callback(call, "menu_change_language") #menu.callback(call, "menu_main")
 
 def handle_city_selection(call, city):
     selected_city = city
-    CommonUrlCreater().set_param("city", selected_city)
+    urlc.set_param("city", selected_city)
     
 def handle_type_selection(call, type):
     selected_type = type
-    CommonUrlCreater().set_param("type", selected_type)
+    urlc.set_param("type", selected_type)
 
 def handle_rooms_selection(call, rooms):
     selected_rooms = rooms
-    CommonUrlCreater().set_param("rooms", selected_rooms)
+    urlc.set_param("rooms", selected_rooms)
 
 def handle_area_selection(call, area):
     if area == "area_min":
@@ -93,11 +83,11 @@ def handle_area_selection(call, area):
 
 def handle_area_min_input(message):
     area_min = message.text
-    CommonUrlCreater().set_param("area_min", area_min)
+    urlc.set_param("area_min", area_min)
 
 def handle_area_max_input(message):
     area_max = message.text
-    CommonUrlCreater().set_param("area_max", area_max)
+    urlc.set_param("area_max", area_max)
 
 def handle_price_selection(call, price):
     if price == "price_min":
@@ -111,11 +101,11 @@ def handle_price_selection(call, price):
 
 def handle_price_min_input(message):
     price_min = message.text
-    CommonUrlCreater().set_param("price_min", price_min)
+    urlc.set_param("price_min", price_min)
     
 def handle_price_max_input(message):
     price_max = message.text
-    CommonUrlCreater().set_param("price_max", price_max)
+    urlc.set_param("price_max", price_max)
     
 def handle_search_selection(call):
 
@@ -123,7 +113,7 @@ def handle_search_selection(call):
                      text=lang.get_language('message_search_wait'))
     menu.callback(call, "menu_search_break")
 
-    offers = scraper.get_data(CommonUrlCreater().get_urls())
+    offers = scraper.get_data(urlc.get_urls())
 
     if len(offers):
         bot.send_message(call.message.chat.id,
@@ -145,6 +135,3 @@ def handle_search_selection(call):
     else:
         bot.send_message(call.message.chat.id,
                          text=lang.get_language('message_not_found'))
-
-if __name__ == "__main__":
-    bot.polling(none_stop=True)

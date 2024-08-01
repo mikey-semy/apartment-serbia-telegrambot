@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+
+    telegram_bot_docker_tmpl:
+        container_name: ApartmentSerbiaBot
+        image: apartment_serbia_bot_docker
+
+        build: .
+
+        environment:
+            - BOT_TOKEN=${BOT_TOKEN}
+
+        ports:
+            - "443:443"
+
+        volumes:
+          - ./logs:/~/ApartmentSerbiaBot/logs
+
+        restart: on-failure
+
+volumes:
+  logs:
+
+
+# -------------------------------
+# Create and start container:
+# $ export BOT_TOKEN=<BOT_TOKEN>
+# $ docker-compose up -d
+# -------------------------------
+# Stop lifted containers:
+# $ docker-compose stop
+# -------------------------------
+# Start stopped containers
+# $ docker-compose start
+# -------------------------------
+# Stop and delete containers and network:
+# $ docker-compose down
+# -------------------------------
+# Remove image:
+# $ docker rmi telegram_bot_docker_tmpl
+# -------------------------------
+# Clear logs:
+# $ sudo rm -rf logs/*

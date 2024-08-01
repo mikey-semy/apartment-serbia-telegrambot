@@ -68,20 +68,20 @@ class NekretnineScraper(WebScraper):
         offer_elements = soup.findAll(self.data["OFFER_TAG"], class_=self.data["OFFER_CLASS"])
 
         count = 0
-        for offer_element in offer_elements:
-
+        #for offer_element in offer_elements:
+        for index in range(len(offer_elements)):
             if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
             self.scrape_pause()
 
-            title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
-            location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
-            # rooms = offer_element.find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
-            price = offer_element.find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
-            # area = offer_element.find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
-            url_offer = offer_element.find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
-            #url_image = offer_element.find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
+            title = offer_element[index].find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
+            location = offer_element[index].find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
+            # rooms = offer_element[index].find(self.data["ROOMS_TAG"], class_=self.data["ROOMS_CLASS"])
+            price = offer_element[index].find(self.data["PRICE_TAG"], class_=self.data["PRICE_CLASS"])
+            # area = offer_element[index].find(self.data["AREA_TAG"], class_=self.data["AREA_CLASS"])
+            url_offer = offer_element[index].find(self.data["LINK_HREF_OFFER_TAG"], class_=self.data["LINK_HREF_OFFER_CLASS"])
+            #url_image = offer_element[index].find(self.data["IMG_SRC_OFFER_TAG"], class_=self.data["IMG_SRC_OFFER_CLASS"])
 
             offer_cleaned = {
                 'title': re.sub(Config.WebScraper.PATTERN, '', str(title.text)),

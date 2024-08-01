@@ -40,6 +40,7 @@ def callback(call):
                 "action_en": lambda call: handle_language_selection(call, "en"),
                 #others
                 "action_search": handle_search_selection,
+                "action_search_continue": handle_search_selection,
         }
         handler = action_handlers.get(call.data, lambda call: print(f"Unknown action callback data: {call.data}"))
         handler(call)

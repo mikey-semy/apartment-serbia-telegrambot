@@ -211,7 +211,7 @@ class CityexpertScraper(WebScraper):
                 # 'rooms': re.sub(PATTERN, '', str(rooms[1].text if rooms is not None else '')),
                 'price': price.find('span').text.strip(),
                 # 'area': re.sub(PATTERN, '', str(area[0].text if area is not None else '')),
-                'url_offer': self.data["BASE_URL"] + url_offer.find('a').get('href'),
+                'url_offer': url_offer.find('a').get('href'),
                 # 'url_image': url_image.find('img').get('src', '') if url_image is not None and url_image.find('img') is not None else ''
             } if title else ''
             

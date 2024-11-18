@@ -1,9 +1,11 @@
 """Модуль для скрапинга сайтов"""
 
-import time
+# import time
 import random
 import re
-import requests
+# import requests
+import aiohttp
+import asyncio
 from bs4 import BeautifulSoup
 import urllib3
 from app.modules.JSONLoader import JSONLoader
@@ -22,24 +24,26 @@ class WebScraper:
         json_loader = JSONLoader(Config.WebScraper.JSON_FILE_NAME)
         self.scraper_data = json_loader.load_json()
 
-    def get_page(self, url) -> object:
-        '''Функция отправляет GET-запрос к URL и возвращает объект BeautifulSoup'''
-        response = requests.get(url, 
-                                headers=Config.WebScraper.HEADERS, 
-                                timeout=Config.WebScraper.TIMEOUT)
-        return BeautifulSoup(response.text, 'html.parser')
+    async def aget_page(self, url) -> object:
+        '''Асинхронная функция отправляет GET-запрос к URL и возвращает объект BeautifulSoup'''
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url, 
+                headers=Config.WebScraper.HEADERS, 
+                timeout=Config.WebScraper.TIMEOUT) as response:
+                html = await response.text()
+                return BeautifulSoup(html, 'html.parser')
             
     def scrape_page(self, soup) -> list:
         '''Абстрактный метод, который должен быть реализован в подклассах'''
         raise NotImplementedError("Subclasses must implement this method")
-    
-    def scrape_pause(self, 
+
+    async def ascrape_pause(self, 
                      min_pause=Config.WebScraper.MIN_PAUSE, 
                      max_pause=Config.WebScraper.MAX_PAUSE) -> None:
-        '''Функция вводит задержку, чтобы предотвратить блокировку скрейпера'''
+        '''Асинхронная функция вводит задержку, чтобы предотвратить блокировку скрейпера'''
         delay = random.uniform(min_pause, max_pause)
-        time.sleep(delay)
-
+        await asyncio.sleep(delay)
     
 class NekretnineScraper(WebScraper):
     '''Скрапер для сайта nekretnine.rs'''
@@ -52,22 +56,21 @@ class NekretnineScraper(WebScraper):
         # Конструируем URL для следующей страницы
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
-    
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
+
+    async def ascrape(self) -> list:
+        '''Асинхронная функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = await self.aget_page(self.url)
+        return await self.ascrape_page(soup)
     
     def has_next_page(self, soup) -> bool:
         '''Функция проверяет, есть ли следующая страница'''
         next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
         return next_page_link is not None
-    
-    def scrape_page(self, soup) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
+
+    async def ascrape_page(self, soup) -> list:
+        '''Асинхронная функция скрейпит страницу и возвращает список предложений на странице'''
 
         offers = []
-
         offer_elements = soup.findAll(self.data["OFFER_TAG"], class_=self.data["OFFER_CLASS"])
 
         count = 0
@@ -76,7 +79,7 @@ class NekretnineScraper(WebScraper):
             if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
-            self.scrape_pause()
+            await self.ascrape_pause()
 
             title = offer_elements[index].find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_elements[index].find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
@@ -101,7 +104,6 @@ class NekretnineScraper(WebScraper):
             offers.append(offer_cleaned)
 
         return offers
-
     
 class FourzidaScraper(WebScraper):
     '''Скрапер для сайта 4zida.rs'''
@@ -113,22 +115,21 @@ class FourzidaScraper(WebScraper):
         self.data = self.scraper_data[self.name]
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
-    
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
+
+    async def ascrape(self) -> list:
+        '''Асинхронная функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = await self.aget_page(self.url)
+        return await self.ascrape_page(soup)
     
     def has_next_page(self, soup) -> bool:
         '''Функция проверяет, есть ли следующая страница'''
         next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
         return next_page_link is not None
-    
-    def scrape_page(self, soup) -> list:
+
+    async def ascrape_page(self, soup) -> list:
         '''Функция скрейпит страницу и возвращает список предложений на странице'''
 
         offers = []
-
         offer_elements = soup.findAll(self.data["OFFER_TAG"], class_=self.data["OFFER_CLASS"])
 
         count = 0
@@ -138,7 +139,7 @@ class FourzidaScraper(WebScraper):
             if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
-            self.scrape_pause()
+            await self.ascrape_pause()
 
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
@@ -162,7 +163,6 @@ class FourzidaScraper(WebScraper):
 
             offers.append(offer_cleaned)
         return offers
-
     
 class CityexpertScraper(WebScraper):
     '''Скрапер для сайта cityexpert.rs'''
@@ -177,18 +177,19 @@ class CityexpertScraper(WebScraper):
         if page_number > 1:
             self.url += self.data["NEXT_PAGE"].format(page_number=page_number)
     
-    def scrape(self) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
-        soup = self.get_page(self.url)
-        return self.scrape_page(soup)
+    async def ascrape(self) -> list:
+        '''Асинхронная функция скрейпит страницу и возвращает список предложений на странице'''
+        soup = await self.aget_page(self.url)
+        return await self.ascrape_page(soup)
 
     def has_next_page(self, soup) -> bool:
         '''Функция проверяет, есть ли следующая страница'''
         next_page_link = soup.find(self.data["NEXT_BUTTON_TAG"], class_=self.data["NEXT_BUTTON_CLASS"])
         return next_page_link is not None
     
-    def scrape_page(self, soup) -> list:
-        '''Функция скрейпит страницу и возвращает список предложений на странице'''
+    async def ascrape_page(self, soup) -> list:
+        '''Асинхронная функция скрейпит страницу и возвращает список предложений на странице'''
+        
         offers = []
         
         offer_elements = soup.findAll(self.data["OFFER_TAG"], class_=self.data["OFFER_CLASS"])
@@ -200,7 +201,7 @@ class CityexpertScraper(WebScraper):
             if count == Config.WebScraper.QUANTITY_OFFERS:
                 break
 
-            self.scrape_pause()
+            await self.ascrape_pause()
 
             title = offer_element.find(self.data["TITLE_TAG"], class_=self.data["TITLE_CLASS"])
             location = offer_element.find(self.data["LOCATION_TAG"], class_=self.data["LOCATION_CLASS"])
@@ -232,7 +233,7 @@ class CommonScraper(WebScraper):
     def __init__(self):
         super().__init__()
   
-    def scrape_page(self, soup):
+    def ascrape_page(self, soup):
         pass
 
     def __get_scraper(self, url: str, page_number: int) -> object:
@@ -247,8 +248,8 @@ class CommonScraper(WebScraper):
         else:
             raise ValueError("Unsupported URL")
     # @timer
-    def get_data(self, urls: list, current_page_number: int = 1, quantity_pages: int = Config.WebScraper.QUANTITY_PAGE) -> list:
-        '''Функция get_data собирает данные со всех страниц сайта'''
+    async def aget_data(self, urls: list, current_page_number: int = 1, quantity_pages: int = Config.WebScraper.QUANTITY_PAGE) -> list:
+        '''Асинхронная функция get_data собирает данные со всех страниц сайта'''
        
         last_page_number = quantity_pages
 
@@ -259,9 +260,9 @@ class CommonScraper(WebScraper):
 
                 scraper = self.__get_scraper(url, current_page_number)
 
-                soup = scraper.get_page(url)
+                soup = await scraper.aget_page(url)
 
-                offers_from_page = scraper.scrape_page(soup)
+                offers_from_page = await scraper.ascrape_page(soup)
 
                 for offer in offers_from_page:
                     all_offers.append(offer)
@@ -274,14 +275,14 @@ class CommonScraper(WebScraper):
         return all_offers
     
 # for check class:
-# def main():
+# async def main():
 #     scraper = CommonScraper()
 #     url_ = ["https://www.nekretnine.rs/apartmani/grad/beograd/kvadratura/1_500/cena/0_1000000",
 #         "https://cityexpert.rs/izdavanje-nekretnina/beograd?ptId=1&maxPrice=550&polygonsArray=Novi%20Beograd",
 #         "https://www.4zida.rs/prodaja-stanova/novi-sad/do-47000-evra?vece_od=25m2&manje_od=30m2&skuplje_od=45000eur"]
-#     offers = scraper.get_data(url_)
+#     offers = await scraper.aget_data(url_)
 #     # print(offers)
 #     print(len(offers))
 
 # if __name__ == "__main__":
-#     main()
+#     asyncio.run(main())

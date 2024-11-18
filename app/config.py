@@ -22,4 +22,4 @@ class Config:
         MIN_PAUSE = 0.5
         MAX_PAUSE = 1
         QUANTITY_PAGE = 1
-        QUANTITY_OFFERS = 3
+        QUANTITY_OFFERS = 10
